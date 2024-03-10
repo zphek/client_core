@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import styles from "./index.module.css";
 import Link from 'next/link';
 
-const SERVICIOS: NextPage = () => {
+const CUENTASACOBRAR: NextPage = () => {
     return (
         <div>
         <header className={styles.negociaCoreHeader}>
@@ -21,7 +21,7 @@ const SERVICIOS: NextPage = () => {
             <div className={styles.depthFramePerfiles}>
                 <img className={styles.perfilesImage} src="public/../../perfiles.png" alt="Perfiles"/>
                 <Link href="/perfiles/home">
-                  <p className={styles.perfilesText}>Perfiles</p>
+                    <p className={styles.perfilesText}>Perfiles</p>
                 </Link>
             </div>
             <div className={styles.depthFrameProductos}>
@@ -38,7 +38,9 @@ const SERVICIOS: NextPage = () => {
             </div>
             <div className={styles.depthFrameServicios}>
                 <img className={styles.serviciosImage} src="public/../../servicios.png" alt="Servicios"/>
-                <p className={styles.serviciosText}>Servicios</p>
+                <Link href="/servicios/home">
+                    <p className={styles.serviciosText}>Servicios</p>
+                </Link>
             </div>
             <div className={styles.depthFrameCotizaciones}>
                 <img className={styles.cotizacionesImage} src="public/../../cotizaciones.png" alt="Cotizaciones"/>
@@ -54,9 +56,7 @@ const SERVICIOS: NextPage = () => {
             </div>
             <div className={styles.depthFrameCuentasPorCobrar}>
                 <img className={styles.cuentasPorCobrarImage} src="public/../../cuentasPorCobrar.png" alt="Cuentas por cobrar"/>
-                <Link href="/cuentas-a-cobrar/home">
-                  <p className={styles.cuentasPorCobrarText}>Cuentas Por Cobrar</p>
-                </Link>
+                <p className={styles.cuentasPorCobrarText}>Cuentas Por Cobrar</p>
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
@@ -66,4 +66,4 @@ const SERVICIOS: NextPage = () => {
     );
 };
 
-export default SERVICIOS;
+export default CUENTASACOBRAR;
