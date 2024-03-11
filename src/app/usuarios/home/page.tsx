@@ -60,6 +60,37 @@ const USUARIOS: NextPage = () => {
           </div>
         </div>
         <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+        <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Usuarios</h1>
+          <h2 className={styles.subtitleRightView}>Manejar usuarios en la aplicación</h2>
+          <div className={styles.searchUserBox}>
+            <img className={styles.searchIcon} src="public/../../search lupa.png" alt="search" />
+            <input className={styles.searchBar} type="text" placeholder="Buscar usuario"/>
+          </div>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th>Nombres</th>
+                  <th>Correos Electrónicos</th>
+                  <th>Roles</th>
+                  <th>Última Vez Activo</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Nombre de Usuario</td>
+                  <td>nombredeusuario@gmail.com</td>
+                  <td>Administrador</td>
+                  <td>Hace 1 minuúto</td>
+                  <td>
+                    <button className={styles.editButton}>Editar</button>
+                    <button className={styles.deleteButton}>Eliminar</button>
+                  </td>
+                </tr> 
+              </tbody>
+          </table>
+        </div>
       </div>
       <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
     </div>
