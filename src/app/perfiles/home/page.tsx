@@ -60,6 +60,37 @@ const PERFILES: NextPage = () => {
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+        <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Perfiles</h1>
+          <h2 className={styles.subtitleRightView}>Manejar perfiles en la aplicación</h2>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th >Roles</th>
+                  <th>Miembros</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={styles.textosTables}>Administrador</td>
+                  <td className={styles.miembros}>1 miembros</td>
+                  <td>
+                    <Link href="/perfiles/edicion">
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/perfiles/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
+                  </td>
+                </tr> 
+              </tbody>
+          </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/perfiles/creacion_perfil">
+            <button className={styles.addUserButton}>Nuevo Perfil</button>
+          </Link>
+        </div>
         </div>
         <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
       </div>

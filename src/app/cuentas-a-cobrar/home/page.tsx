@@ -60,6 +60,47 @@ const CUENTASACOBRAR: NextPage = () => {
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+          <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Cuentas por Cobrar</h1>
+          <h2 className={styles.subtitleRightView}>Manejar cuentas por cobrar en la aplicación</h2>
+          <div className={styles.searchUserBox}>
+            <img className={styles.searchIcon} src="public/../../search lupa.png" alt="search" />
+            <input className={styles.searchBar} type="text" placeholder="Buscar cuenta por cobrar"/>
+          </div>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Factura</th>
+                  <th>Cantidad</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={styles.textosTables}>1</td>
+                  <td className={styles.textosTables}>1</td>
+                  <td className={styles.textosTables}>$0.00</td>
+                  <td className={styles.textosTables}>29-02-2024</td>
+                  <td className={styles.textosTables}>Pendiente</td>
+                  <td>
+                    <Link href="/cuentas-a-cobrar/edicion">
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/cuentas-a-cobrar/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/cuentas-a-cobrar/creacion_cuenta_cobrar">
+            <button className={styles.addUserButton}>Nuevo CC</button>
+          </Link>
+        </div>
         </div>
         <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
       </div>

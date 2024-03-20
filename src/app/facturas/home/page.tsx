@@ -60,6 +60,45 @@ const FACTURAS: NextPage = () => {
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+          <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Facturas</h1>
+          <h2 className={styles.subtitleRightView}>Manejar facturas en la aplicación</h2>
+          <div className={styles.searchUserBox}>
+            <img className={styles.searchIcon} src="public/../../search lupa.png" alt="search" />
+            <input className={styles.searchBar} type="text" placeholder="Buscar factura"/>
+          </div>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th >ID</th>
+                  <th>Cliente</th>
+                  <th>Fecha</th>
+                  <th>Cantidad total</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={styles.textosTables}>1</td>
+                  <td className={styles.textosTables}>Nombre Cliente</td>
+                  <td className={styles.textosTables}>29-02-2024</td>
+                  <td className={styles.textosTables}>$0.00</td>
+                  <td>
+                    <Link href="/facturas/edicion">
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/facturas/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/facturas/creacion_factura">
+            <button className={styles.addUserButton}>Nuevo Factura</button>
+          </Link>
+        </div>
         </div>
         <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
       </div>

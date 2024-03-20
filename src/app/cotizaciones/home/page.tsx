@@ -60,6 +60,45 @@ const COTIZACIONES: NextPage = () => {
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+          <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Cotizaciones</h1>
+          <h2 className={styles.subtitleRightView}>Manejar cotizaciones en la aplicación</h2>
+          <div className={styles.searchUserBox}>
+            <img className={styles.searchIcon} src="public/../../search lupa.png" alt="search" />
+            <input className={styles.searchBar} type="text" placeholder="Buscar cotizaciones"/>
+          </div>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th >Nombres</th>
+                  <th>Fecha</th>
+                  <th>Precio</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={styles.textosTables}>Nombre de Usuario</td>
+                  <td className={styles.textosTables}>29-02-2024</td>
+                  <td className={styles.textosTables}>$0.00</td>
+                  <td className={styles.textosTables}>Pendiente</td>
+                  <td>
+                    <Link href="/cotizaciones/edicion"> 
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/cotizaciones/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/cotizaciones/creacion_cotizacion">
+            <button className={styles.addUserButton}>Nuevo Cotización</button>
+          </Link>
+        </div>
         </div>
         <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
       </div>

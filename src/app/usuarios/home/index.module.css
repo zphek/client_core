@@ -296,3 +296,89 @@
   border-collapse:separate;
   border-radius:6px;
 }
+
+.editButton {
+  background-color: #4C4C4C;
+  border-radius: 20px;
+  padding: 4px;
+  color: white;
+}
+
+.deleteButton {
+  background-color: #FF0000;
+  border-radius: 20px;
+  padding: 4px;
+  color: white;
+  margin-left: 4px;
+}
+
+.userCrud th {
+  text-align: left;
+}
+
+.Roles {
+  background-color: #4C4C4C;
+  border-radius: 20px;
+  padding: 4px;
+  color: white;
+  text-align: center;
+}
+
+.textosTables{
+  color: #808080;
+}
+
+.verticalDividerTable {
+  position: absolute;
+  top: 226px;
+  left: 350px;
+  height: 1px;
+  width: 921px;
+  background-color: #808080;
+}
+
+.addUserButton{
+  color: white;
+  background-color: #1A80E5;
+  border-radius: 30px;
+  font-size: 30px;
+  padding: 10px;
+  position: absolute;
+  top: 825px;
+  left: 17px;
+}
+
+.perfilesText:hover {
+  color: #1A80E5;
+  text-decoration: underline;
+}
+
+.productosText:hover {
+  color: #1A80E5;
+  text-decoration: underline;
+}
+
+.clientesText:hover {
+  color: #1A80E5;
+  text-decoration: underline;
+}
+
+  .serviciosText:hover {
+      color: #1A80E5;
+      text-decoration: underline;
+  }
+
+.cotizacionesText:hover {
+  color: #1A80E5;
+  text-decoration: underline;
+}
+
+.facturasText:hover {
+  color: #1A80E5;
+  text-decoration: underline;
+}
+
+.cuentasPorCobrarText:hover {
+  color: #1A80E5;
+  text-decoration: underline;
+}

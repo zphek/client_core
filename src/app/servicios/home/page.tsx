@@ -60,6 +60,43 @@ const SERVICIOS: NextPage = () => {
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+          <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Servicios</h1>
+          <h2 className={styles.subtitleRightView}>Manejar servicios en la aplicación</h2>
+          <div className={styles.searchUserBox}>
+            <img className={styles.searchIcon} src="public/../../search lupa.png" alt="search" />
+            <input className={styles.searchBar} type="text" placeholder="Buscar servicio"/>
+          </div>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th >Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={styles.textosTables}>Lorem Ipsum</td>
+                  <td className={styles.textosTables}>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</td>
+                  <td className={styles.textosTables}>$0.00</td>
+                  <td>
+                    <Link href="/servicios/edicion">
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/servicios/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
+                  </td>
+                </tr> 
+              </tbody>
+          </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/servicios/creacion_servicio">
+            <button className={styles.addUserButton}>Nuevo Servicio</button>
+          </Link>
+        </div>
         </div>
         <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
       </div>

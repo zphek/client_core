@@ -70,7 +70,7 @@ const USUARIOS: NextPage = () => {
           <table className={styles.userCrud}>
               <thead>
                 <tr>
-                  <th>Nombres</th>
+                  <th >Nombres</th>
                   <th>Correos Electrónicos</th>
                   <th>Roles</th>
                   <th>Última Vez Activo</th>
@@ -79,17 +79,25 @@ const USUARIOS: NextPage = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td>Nombre de Usuario</td>
-                  <td>nombredeusuario@gmail.com</td>
-                  <td>Administrador</td>
-                  <td>Hace 1 minuúto</td>
+                  <td className={styles.textosTables}>Nombre de Usuario</td>
+                  <td className={styles.textosTables}>nombredeusuario@gmail.com</td>
+                  <td className={styles.Roles}>Administrador</td>
+                  <td className={styles.textosTables}>Hace 1 minuto</td>
                   <td>
-                    <button className={styles.editButton}>Editar</button>
-                    <button className={styles.deleteButton}>Eliminar</button>
+                    <Link href="/usuarios/edicion">
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/usuarios/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
                   </td>
                 </tr> 
               </tbody>
           </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/usuarios/creacion_usuario">
+            <button className={styles.addUserButton}>Nuevo Usuario</button>
+          </Link>
         </div>
       </div>
       <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>

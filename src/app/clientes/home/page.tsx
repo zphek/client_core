@@ -60,6 +60,43 @@ const CLIENTES: NextPage = () => {
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+          <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Clientes</h1>
+          <h2 className={styles.subtitleRightView}>Manejar clientes en la aplicación</h2>
+          <div className={styles.searchUserBox}>
+            <img className={styles.searchIcon} src="public/../../search lupa.png" alt="search" />
+            <input className={styles.searchBar} type="text" placeholder="Buscar cliente"/>
+          </div>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th >Nombres</th>
+                  <th>Correos Electrónicos</th>
+                  <th>Teléfono</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={styles.textosTables}>Nombre de Cliente</td>
+                  <td className={styles.textosTables}>nombredecliente@gmail.com</td>
+                  <td className={styles.textosTables}>809-000-0000</td>
+                  <td>
+                    <Link href="/clientes/edicion">
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/clientes/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
+                  </td>
+                </tr> 
+              </tbody>
+          </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/clientes/creacion_clientes">
+            <button className={styles.addUserButton}>Nuevo Cliente</button>
+          </Link>
+        </div>
         </div>
         <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
       </div>

@@ -60,6 +60,49 @@ const PRODUCTOS: NextPage = () => {
             </div>
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
+          <div className={styles.rightView}>
+          <h1 className={styles.titleRightView}>Productos</h1>
+          <h2 className={styles.subtitleRightView}>Manejar productos en la aplicación</h2>
+          <div className={styles.searchUserBox}>
+            <img className={styles.searchIcon} src="public/../../search lupa.png" alt="search" />
+            <input className={styles.searchBar} type="text" placeholder="Buscar producto"/>
+          </div>
+          <table className={styles.userCrud}>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th >Productos</th>
+                  <th>Cantidad</th>
+                  <th>Tipo</th>
+                  <th>Precio</th>
+                  <th>Proveedor</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><img src="public/../../image frame.png" alt="Foto"></img></td>
+                  <td className={styles.textosTables}>Lorem</td>
+                  <td className={styles.textosTables}>70</td>
+                  <td className={styles.textosTables}>Ipsum</td>
+                  <td className={styles.textosTables}>$0.00</td>
+                  <td className={styles.textosTables}>Adidas</td>
+                  <td>
+                    <Link href="/productos/edicion">
+                      <button className={styles.editButton}>Editar</button>
+                    </Link>
+                    <Link href="/productos/eliminar">
+                      <button className={styles.deleteButton}>Eliminar</button>
+                    </Link>
+                  </td>
+                </tr> 
+              </tbody>
+          </table>
+          <div className={styles.verticalDividerTable}/>
+          <Link href="/productos/creacion_producto">
+            <button className={styles.addUserButton}>Nuevo Producto</button>
+          </Link>
+        </div>
         </div>
         <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
       </div>
