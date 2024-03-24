@@ -1,0 +1,12 @@
+
+.option{
+    @apply p-2 rounded-lg transition-all text-slate-600
+}
+
+.option:hover{
+    @apply bg-slate-300/20
+}
+
+.option:hover>*{
+    @apply text-indigo-500
+}

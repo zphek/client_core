@@ -1,0 +1,24 @@
+.option:hover > *{
+    @apply text-white transition-[200ms]
+}
+
+.active-option{
+    @apply bg-blue-500
+}
+
+.active-option>*{
+    @apply text-white transition-[300ms]
+}
+
+.showed_sidebar {
+    transform: translateX(0%);
+    transition: transform 0.5s ease;
+}
+
+.hided_sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+
+
