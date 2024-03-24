@@ -1,15 +1,18 @@
+'use client'
+
 import type { NextPage } from "next";
-import styles from "./index.module.css";
-import Link from 'next/link';
-import Sidebar from "@/components/Sidebar/Sidebar";
+import { usePageStore } from "@/store/actualPageStore";
+import { useEffect } from "react";
 
 const COTIZACIONES: NextPage = () => {
+    const setUrl = usePageStore((state) => state.changeUrl);
+
+    useEffect(()=>{
+      setUrl(window.location.pathname);
+    }, [])
+
     return (
-      <div className="flex">
-        <Sidebar activeUrl={'perfiles'}/>  
-        <div className="w-[100%] bg-blue-500">
-          <h2>BUENSAS</h2>
-        </div>
+      <div className="flex w-[100%] bg-blue-500">
       </div>
     );
 };

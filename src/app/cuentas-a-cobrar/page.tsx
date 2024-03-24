@@ -1,15 +1,19 @@
+'use client'
+
+import { usePageStore } from "@/store/actualPageStore";
 import type { NextPage } from "next";
-import styles from "./index.module.css";
-import Link from 'next/link';
-import Sidebar from "@/components/Sidebar/Sidebar";
+import { useEffect } from "react";
 
 const CUENTASACOBRAR: NextPage = () => {
+    const setUrl = usePageStore((state) => state.changeUrl);
+
+    useEffect(()=>{
+      setUrl(window.location.pathname);
+    }, [])
+
     return (
-      <div className="flex">
-        <Sidebar activeUrl={'cuentas-a-cobrar'}/>  
-        <div className="w-[100%] bg-blue-500">
-          <h2>BUENSAS</h2>
-        </div>
+      <div className="flex w-[100%] bg-blue-500">
+      
       </div>
     );
 };

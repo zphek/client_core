@@ -1,13 +1,13 @@
 "use client"
 import { FontawesomeObject } from "@fortawesome/fontawesome-svg-core";
-import { faArrowLeft, faBox, faFileInvoice, faMoneyBill, faPersonShelter, faQuoteLeft, faTruck, faTruckLoading, faUser, faUsers, faUsersLine } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBox, faClose, faDashboard, faFileInvoice, faMoneyBill, faPersonShelter, faQuoteLeft, faSignOut, faTable, faTruck, faTruckLoading, faUser, faUsers, faUsersLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons/faFileInvoiceDollar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import "./style.css";
-import { faArrowLeftRotate } from "@fortawesome/free-solid-svg-icons/faArrowLeftRotate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePageStore } from "@/store/actualPageStore";
 
 interface option{
     name: string,
@@ -16,6 +16,7 @@ interface option{
 }
 
 const menuOptions: option[] = [
+    { icon: faDashboard, name: "Dashboard", to: "/dashboard"},
     { icon: faUsers, name: "Usuarios", to: "/usuarios" },
     { icon: faUser, name: "Perfiles", to: "/perfiles" },
     { icon: faBox, name: "Productos", to: "/productos" },
@@ -26,24 +27,20 @@ const menuOptions: option[] = [
     { icon: faFileInvoiceDollar, name: "Cuentas por cobrar", to: "/cuentas-a-cobrar" }
 ]
 
-function Sidebar({ activeUrl }:any) {
+function Sidebar() {
     let [hide, setHide] = useState(false);
-
-    
-    let url = "/" + activeUrl;
-
-    console.log(url)
+    const url = usePageStore((state) => state.url);
     
     return (
-        <div className={`py-5 px-10 flex flex-col min-h-screen border-r-2 border-slate-300/20 m-0 min-w-[25%] ${hide ? 'hided_sidebar' : 'showed_sidebar'}`}>
+        <div className={`py-5 flex flex-col min-h-screen border-r-2 border-slate-300/20 m-0 ${hide ? 'hided_sidebar' : 'showed_sidebar w-[300px] px-12'}`}>
             <div className={`flex items-center overflow-hidden ${hide && 'hidden'}`}>
                 <Image src={"/images/cart.svg"} width={70} height={70} alt="CORElogo"/>
                 <h2 className="text-blue-500 font-extrabold text-3xl">CORE</h2>
             </div>
 
-            <div className="overflow-hidden">
+            {/* <div className="overflow-hidden">
                 <h1 className={`text-5xl font-extrabold mt-5 ${hide && 'hidden'}`}>Registros</h1>
-            </div>
+            </div> */}
            
             <div className={`options flex flex-col mt-6 gap-y-2 overflow-x-hidden ${hide && 'hidden'}`}>
                 {menuOptions.map((option: option)=>(
@@ -54,9 +51,13 @@ function Sidebar({ activeUrl }:any) {
                 ))}
             </div>
 
-            <button className={"flex items-center justify-center rounded-full text-white bg-blue-700 p-2 absolute -right-5 top-3 " + (hide && " rotate-180 transition-all -right-14")} onClick={()=>{ setHide(!hide) }}>
-                <FontAwesomeIcon icon={faArrowLeft} size="xl"/>
+            <button className={"bg-blue-800 rounded-lg py-2 px-5 text-white font-bold mt-20 text-lg hover:bg-white hover:text-blue-500 hover:ring-2 hover:ring-blue-500 transition-all " + (hide && "hidden")}>
+                <FontAwesomeIcon icon={faSignOut}/> CERRAR SESION
             </button>
+
+            {/* <button className={"flex items-center justify-center rounded-full text-white bg-blue-700 p-2 absolute top-4 " + (hide ? "rotate-180 transition-all -right-12" : " -right-5")} onClick={()=>{ setHide(!hide) }}>
+                <FontAwesomeIcon icon={faArrowLeft} size="xl"/>
+            </button> */}
         </div>
     );
 }

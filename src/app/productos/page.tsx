@@ -6,24 +6,19 @@ import Link from 'next/link';
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { useRouter } from "next/router";
 import { use, useEffect, useState } from "react";
+import { usePageStore } from "@/store/actualPageStore";
 
 const PRODUCTOS: NextPage = () => {
-    const [currentUrl, setCurrentUrl] = useState('');
+    const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
-      let router = window.location.href; // Obtener el router
-
-      setCurrentUrl(router);
+      setUrl(window.location.pathname);
     }, [])
 
+
     return (
-      <div className="flex justif-around">
-        <div className="flex flex-col">
-          <Sidebar activeUrl={currentUrl}/>  
+        <div className="flex justify-around w-[100%] bg-blue-500">
         </div>
-        <div className=" bg-blue-500 w-[100%]">
-        </div>
-      </div>
     );
 };
 

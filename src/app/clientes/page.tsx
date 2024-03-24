@@ -1,8 +1,16 @@
+'use client'
+
 import type { NextPage } from "next";
-import styles from "./index.module.css";
-import Link from 'next/link';
+import { usePageStore } from "@/store/actualPageStore";
+import { useEffect } from "react";
 
 const CLIENTES: NextPage = () => {
+    const setUrl = usePageStore((state) => state.changeUrl);
+
+    useEffect(()=>{
+      setUrl(window.location.pathname);
+    }, [])
+
     return (
         <div>
         
