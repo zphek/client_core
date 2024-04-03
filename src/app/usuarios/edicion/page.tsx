@@ -61,7 +61,7 @@ const USUARIOS: NextPage = () => {
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
           <div className={styles.rightView}>
-            <h1 className={styles.titleRightView}>Crear usuario</h1>
+            <h1 className={styles.titleRightView}>Editar Usuario</h1>
             <label className={styles.nombreUsuario}>Nombre de usuario</label>
             <input className={styles.inputNombreUsuario} type="text" placeholder="Nombre de usuario"/>
             <label className={styles.nombreCompleto}>Nombre completo</label>

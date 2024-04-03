@@ -61,7 +61,7 @@ const CUENTASACOBRAR: NextPage = () => {
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
           <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Cuentas por Cobrar</h1>
+          <h1 className={styles.titleRightView}>Crear Cuenta por Cobrar</h1>
           <label className={styles.idFactura}>ID de la factura</label>
           <input className={styles.idFacturaInput} type="text" placeholder="ID"/>
           <label className={styles.cantidad}>Cantidad</label>

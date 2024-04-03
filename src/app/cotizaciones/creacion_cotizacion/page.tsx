@@ -61,7 +61,7 @@ const COTIZACIONES: NextPage = () => {
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
           <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Cotizaciones</h1>
+          <h1 className={styles.titleRightView}>Crear Cotización</h1>
           <label className={styles.nombreEmpresa}>Nombre de la empresa</label>
           <input className={styles.inputNombreEmpresa} type="text" placeholder="Nombre de la empresa"/>
           <label className={styles.fechaCotizacion}>Fecha de la cotización</label>

@@ -62,7 +62,7 @@ const CLIENTES: NextPage = () => {
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
           <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Clientes</h1>
+          <h1 className={styles.titleRightView}>Crear Cliente</h1>
           <label className={styles.nombreCliente}>Nombre del cliente</label>
           <input className={styles.inputNombreCliente} type="text" placeholder="Nombre del cliente"/>
           <label className={styles.correoCliente}>Correo electrónico del cliente</label>

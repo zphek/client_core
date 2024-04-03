@@ -61,7 +61,7 @@ const PERFILES: NextPage = () => {
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
           <div className={styles.rightView}>
-            <h1 className={styles.titleRightView}>Crear perfil</h1>
+            <h1 className={styles.titleRightView}>Editar Perfil</h1>
             <label className={styles.nombrePerfil}>Nombre del perfil</label>
             <input className={styles.inputNombrePerfil} type="text" placeholder="Nombre del perfil"/>
             <label className={styles.descripcion}>Descripción</label>

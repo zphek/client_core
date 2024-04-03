@@ -61,7 +61,7 @@ const SERVICIOS: NextPage = () => {
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
           <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Servicios</h1>
+          <h1 className={styles.titleRightView}>Crear Servicio</h1>
           <label className={styles.nombreServicio}>Nombre del servicio</label>
           <input className={styles.inputNombreServicio} type="text" placeholder="Nombre del servicio"/>
           <label className={styles.descripcionServicio}>Descripción del servicio</label>

@@ -61,7 +61,7 @@ const PRODUCTOS: NextPage = () => {
           </div>
           <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
           <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Productos</h1>
+          <h1 className={styles.titleRightView}>Crear Producto</h1>
           <label className={styles.nombreProducto}>Nombre del producto</label>
           <input className={styles.inputNombreProducto} type="text" placeholder="Nombre del producto"/>
           <label className={styles.cantidadStock}>Cantidad en stock</label>

@@ -13,7 +13,7 @@
 
 .left-menu {
   width: 313px;
-  height: 497px;
+  height: auto;
   background-color: #f5f5f5;
   border-radius: 10px;
   box-shadow: gray solid;
@@ -242,7 +242,9 @@
 .footerImage {
   position: absolute;
   top: 900px;
+  width: 100%;
 }
+
 
 .titleRightView {
   left: 350px;
