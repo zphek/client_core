@@ -92,7 +92,7 @@ function UsuariosCreate() {
                 <select name="status" id="" onChange={(e)=>handleChange(e)} required>
                     {status.length == 0 ?
                     <option>NO MÉTODOS DE PAGO</option>
-                    :status.map(cate=> <option key={cate.ID} id={"" + cate.ID} value={cate.ID}>{cate.category_name}</option> )}
+                    :status.map(cate=> <option key={cate.ID} id={"" + cate.IñD} value={cate.ID}>{cate.category_name}</option> )}
                 </select>
             </div>
 
