@@ -46,7 +46,7 @@ function ProductosCreate() {
     const [available, setAvailable] = useState(null);
     let inputFile = useRef(null);
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         setUrl('/productos');
         
         send_request('get', 'http://localhost:3000/products/get', null, 12345)
@@ -58,7 +58,7 @@ function ProductosCreate() {
         .then(({data})=>{
             setCategory(data);
         });
-      }, [])
+      }, [])*/
 
     function searchProduct(e: ChangeEvent<HTMLInputElement>){
         const p = products.find(element=> element.product_name.toLowerCase() == e.target.value.toLowerCase())

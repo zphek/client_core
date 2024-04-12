@@ -28,13 +28,13 @@ const USUARIOS: NextPage = () => {
         <div className="flex gap-x-3 mt-5">
           <div className="flex items-center bg-slate-200/50 flex-grow px-3 py-2 gap-x-2 rounded-lg">
             <FontAwesomeIcon icon={faSearch} size="lg" className="text-gray-500/50"/>
-            <input type="text" name="" id="" className="flex-grow bg-transparent outline-none"/>
+            <input type="text" name="" id="" className="flex-grow bg-transparent outline-none" placeholder="Escribe para filtrar..."/>
           </div>
 
-          <button className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
+          <Link href={'/usuarios/create'}className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
             <FontAwesomeIcon icon={faAdd}/>
-            NEW USER
-          </button>
+            NUEVO USUARIO
+          </Link>
         </div>
       </div>
 

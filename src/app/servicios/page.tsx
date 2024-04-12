@@ -5,6 +5,7 @@ import { usePageStore } from "@/store/actualPageStore";
 import { useEffect } from "react";
 import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 const SERVICIOS: NextPage = () => {
     const setUrl = usePageStore((state) => state.changeUrl);
@@ -28,10 +29,10 @@ const SERVICIOS: NextPage = () => {
               <input type="text" name="" id="" className="flex-grow bg-transparent outline-none"/>
             </div>
   
-            <button className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
+            <Link href={'/servicios/create'} className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
               <FontAwesomeIcon icon={faAdd}/>
-              NEW USER
-            </button>
+              NUEVO SERVICIO
+            </Link>
           </div>
         </div>
   

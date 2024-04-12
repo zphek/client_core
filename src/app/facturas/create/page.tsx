@@ -7,29 +7,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
-interface accounts_receivable{
-    account_id: number,
-    invoice_id: number,
-    amount: number,
-    due_date: Date,
-    status: number
+interface invoices{
+    ID: number,
+    client_id: number,
+    invoice_date: Date,
+    total_amount: number,
+    payment_method: number
 }
 
 interface form{
-    invoice_id: number,
-    amount: number,
-    due_date: Date,
-    status: string
+    client_name: string,
+    invoice_date: Date,
+    total_amount: number,
+    payment_method: string
 }
 
 function UsuariosCreate() {
     const setUrl = usePageStore((state) => state.changeUrl);
-    const [accounts_receivable, setInvoices] = useState<accounts_receivable[]>([]);
+    const [invoices, setInvoices] = useState<invoices[]>([]);
     const [formData, setFormData] = useState({
-        invoice_id: 0,
-        amount: 0,
-        due_date: new Date(),
-        status: ""
+        client_name: "",
+        invoice_date: new Date(),
+        total_amount: 0,
+        payment_method: ""
     });
 
     const [available, setAvailable] = useState(null);
@@ -63,33 +63,32 @@ function UsuariosCreate() {
     
     return (
     <div className="min-h-screen">
-        <Link href={'/cuentas-a-cobrar'} className="flex items-center font-bold gap-x-2 text-blue-500 p-5">
+        <Link href={'/facturas'} className="flex items-center font-bold gap-x-2 text-blue-500 p-5">
             <FontAwesomeIcon icon={faArrowLeft}/>
             <h2>VOLVER</h2>
         </Link>
 
-        <h2 className="text-5xl font-extrabold p-5">Crear Cuenta a Cobrar</h2>
+        <h2 className="text-5xl font-extrabold p-5">Crear Factura</h2>
 
         <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
             <div>
-                <h2 className="text-xl">ID de la factura</h2>
-                <input type="text" name="invoice_id" id="" onChange={(e)=>{ handleChange(e) }} required/>
-            </div>
-
-            
-            <div>
-                <h2 className="text-xl">Precio total</h2>
-                <input type="number" name="amount" id="" min={0} defaultValue={1} onChange={(e)=>handleChange(e)} required/>
+                <h2 className="text-xl">Nombre del cliente</h2>
+                <input type="text" name="client_name" id="" onChange={(e)=>{ handleChange(e) }} required/>
             </div>
 
             <div>
                 <h2 className="text-xl">Fecha de la factura</h2>
-                <input type="date" name="due_date" id="" onChange={(e)=> handleChange(e)} required/>
+                <input type="date" name="invoice_date" id="" onChange={(e)=> handleChange(e)} required/>
             </div>
 
             <div>
-                <h2 className="text-xl">Estado</h2>
-                <select name="status" id="" onChange={(e)=>handleChange(e)} required>
+                <h2 className="text-xl">Precio total</h2>
+                <input type="number" name="total_amount" id="" min={0} defaultValue={1} onChange={(e)=>handleChange(e)} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Método de pago</h2>
+                <select name="payment_method" id="" onChange={(e)=>handleChange(e)} required>
                     {status.length == 0 ?
                     <option>NO MÉTODOS DE PAGO</option>
                     :status.map(cate=> <option key={cate.ID} id={"" + cate.ID} value={cate.ID}>{cate.category_name}</option> )}
@@ -104,6 +103,7 @@ function UsuariosCreate() {
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>
+
         </form>
     </div>);
 }

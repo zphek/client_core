@@ -25,14 +25,14 @@ const PRODUCTOS: NextPage = () => {
     const setUrl = usePageStore((state) => state.changeUrl);
     const [products, setProducts] = useState<product[]>([]);
 
-    useEffect(()=>{
+    /*useEffect(()=>{
       setUrl(window.location.pathname);
 
       send_request('get', 'http://localhost:3000/products/get', null, 12345)
       .then(({data})=>{
         setProducts(data);
       })
-    }, [])
+    }, [])*/
 
 
     return (
@@ -49,7 +49,6 @@ const PRODUCTOS: NextPage = () => {
               <FontAwesomeIcon icon={faSearch} size="lg" className="text-gray-500/50"/>
               <input type="text" name="" id="" className="flex-grow bg-transparent outline-none" placeholder="Escribe para filtrar..."/>
             </div>
-  
             <Link href={'/productos/create'} className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
               <FontAwesomeIcon icon={faAdd}/>
               NUEVO PRODUCTO

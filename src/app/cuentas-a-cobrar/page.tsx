@@ -5,6 +5,7 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { NextPage } from "next";
 import { useEffect } from "react";
+import Link from "next/link";
 
 const CUENTASACOBRAR: NextPage = () => {
     const setUrl = usePageStore((state) => state.changeUrl);
@@ -28,10 +29,10 @@ const CUENTASACOBRAR: NextPage = () => {
               <input type="text" name="" id="" className="flex-grow bg-transparent outline-none"/>
             </div>
   
-            <button className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
+            <Link href={'/cuentas-a-cobrar/create'}className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
               <FontAwesomeIcon icon={faAdd}/>
-              NEW USER
-            </button>
+              NUEVA CUENTA POR COBRAR
+            </Link>
           </div>
         </div>
   
