@@ -1,88 +1,111 @@
-import type { NextPage } from "next";
-import styles from "./index.module.css";
-import Link from 'next/link';
+'use client'
 
-const COTIZACIONES: NextPage = () => {
+import { send_request } from "@/helpers/sendreq";
+import { usePageStore } from "@/store/actualPageStore";
+import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCircleNotch, faClose, faRotate, faSave, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+
+interface quotes{
+    ID: number,
+    client_id: number,
+    quote_date: Date,
+    total_amount: number,
+    status: string
+}
+
+interface form{
+    client_name: string,
+    quote_date: Date,
+    total_amount: number,
+    status: string
+}
+
+function UsuariosCreate() {
+    const setUrl = usePageStore((state) => state.changeUrl);
+    const [quotes, setQuotes] = useState<quotes[]>([]);
+    const [formData, setFormData] = useState({
+        client_name: "",
+        quote_date: new Date(),
+        total_amount: 0,
+        status: ""
+    });
+
+    const [available, setAvailable] = useState(null);
+
+    /*useEffect(()=>{
+        setUrl('/usuarios');
+        
+        send_request('get', 'http://localhost:3000/products/get', null, 12345)
+        .then(({data})=>{
+            setUsers(data);
+        });
+
+        send_request('get', 'http://localhost:3000/category/get', null, 12345)
+        .then(({data})=>{
+            setProfile(data);
+        });
+      }, [])*/
+    
+    function handleChange(e: ChangeEvent<HTMLInputElement> | any){
+        const name = e.target.name;
+        const value = typeof(formData[name]) == "number" ? parseInt(e.target.value) : e.target.value;
+
+        setFormData((prev)=> ({...prev, [name]: value}))
+        
+        console.log({ ...formData, [e.target.name]: value });
+    }
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>){
+        e.preventDefault();
+    }
+    
     return (
-        <div>
-        <header className={styles.negociaCoreHeader}>
-          <img className={styles.negociaImage} src="public/../../Group 1.jpg" alt="NegociaCore"/>
-        </header>
-        <hr className={styles.dividerHorizontal}/>
-        <div className={styles.mainContainer}>
-          <div className={styles.leftMenu}>
-            <h1 className={styles.title}>Registros</h1>
-            <div className={styles.depthFrameUsuarios}>
-                <img className={styles.usuariosImage} src="public/../../usuarios.png" alt="Usuarios"/>
-                <Link href="/usuarios/home">
-                    <p className={styles.usuariosText}>Usuarios</p>
-                </Link>
-            </div>
-            <div className={styles.depthFramePerfiles}>
-                <img className={styles.perfilesImage} src="public/../../perfiles.png" alt="Perfiles"/>
-                <Link href="/perfiles/home">
-                    <p className={styles.perfilesText}>Perfiles</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameProductos}>
-                <img className={styles.productosImage} src="public/../../productos.png" alt="Productos"/>
-                <Link href="/productos/home">
-                  <p className={styles.productosText}>Productos</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameClientes}>
-                <img className={styles.clientesImage} src="public/../../clientes.png" alt="Clientes"/>
-                <Link href="/clientes/home">
-                  <p className={styles.clientesText}>Clientes</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameServicios}>
-                <img className={styles.serviciosImage} src="public/../../servicios.png" alt="Servicios"/>
-                <Link href="/servicios/home">
-                    <p className={styles.serviciosText}>Servicios</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameCotizaciones}>
-                <img className={styles.cotizacionesImage} src="public/../../cotizaciones.png" alt="Cotizaciones"/>
-                <p className={styles.cotizacionesText}>Cotizaciones</p>
-            </div>
-            <div className={styles.depthFrameFacturas}>
-                <img className={styles.facturasImage} src="public/../../facturas.png" alt="Facturas"/>
-                <Link href="/facturas/home">
-                  <p className={styles.facturasText}>Facturas</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameCuentasPorCobrar}>
-                <img className={styles.cuentasPorCobrarImage} src="public/../../cuentasPorCobrar.png" alt="Cuentas por cobrar"/>
-                <Link href="/cuentas-a-cobrar/home">
-                    <p className={styles.cuentasPorCobrarText}>Cuentas Por Cobrar</p>
-                </Link>
-            </div>
-          </div>
-          <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
-          <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Editar Cotización</h1>
-          <label className={styles.nombreEmpresa}>Nombre de la empresa</label>
-          <input className={styles.inputNombreEmpresa} type="text" placeholder="Nombre de la empresa"/>
-          <label className={styles.fechaCotizacion}>Fecha de la cotización</label>
-          <input className={styles.inputFecha} type="date"/>
-          <label className={styles.precioCotizacion}>Precio de la cotización</label>
-          <input className={styles.inputPrecio} type="text" placeholder="$0.00"/>
-          <label className={styles.estado}>Estado</label>
-          <select className={styles.dropdown}>
-            <option value="pendiente">Pendiente</option>
-            <option value="aceptada">Aceptada</option>
-            <option value="rechazada">Rechazada</option>
-        </select>
-          <button className={styles.botonGuardarCambios}>Guardar Cambios</button>
-            <Link href="/cotizaciones/home">
-                <button className={styles.botonCancelar}>Cancelar</button>
-            </Link>
-        </div>
-        </div>
-        <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
-      </div>
-    );
-};
+    <div className="min-h-screen">
+        <Link href={'/cotizaciones'} className="flex items-center font-bold gap-x-2 text-blue-500 p-5">
+            <FontAwesomeIcon icon={faArrowLeft}/>
+            <h2>VOLVER</h2>
+        </Link>
 
-export default COTIZACIONES;
+        <h2 className="text-5xl font-extrabold p-5">Actualizar Cotización</h2>
+
+        <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
+            <div>
+                <h2 className="text-xl">Nombre del cliente</h2>
+                <input type="text" name="client_name" id="" onChange={(e)=>{ handleChange(e) }} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Fecha de la cotización</h2>
+                <input type="date" name="quote_date" id="" onChange={(e)=> handleChange(e)} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Precio</h2>
+                <input type="number" name="total_amount" id="" min={0} defaultValue={1} onChange={(e)=>handleChange(e)} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Estado</h2>
+                <select name="status" id="" onChange={(e)=>handleChange(e)} required>
+                    {status.length == 0 ?
+                    <option>NO ESTADOS</option>
+                    :status.map(cate=> <option key={cate.ID} id={"" + cate.ID} value={cate.ID}>{cate.category_name}</option> )}
+                </select>
+            </div>
+
+            <div className="w-[30em] flex gap-x-4">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                    <FontAwesomeIcon icon={faSave}/>
+                    MODIFICAR</button>
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                    <FontAwesomeIcon icon={faCancel}/>
+                    CANCELAR</button>
+            </div>
+
+        </form>
+    </div>);
+}
+
+export default UsuariosCreate;

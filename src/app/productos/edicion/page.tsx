@@ -1,92 +1,161 @@
-import type { NextPage } from "next";
-import styles from "./index.module.css";
-import Link from 'next/link';
+'use client'
 
-const PRODUCTOS: NextPage = () => {
-    return (
-        <div>
-        <header className={styles.negociaCoreHeader}>
-          <img className={styles.negociaImage} src="public/../../Group 1.jpg" alt="NegociaCore"/>
-        </header>
-        <hr className={styles.dividerHorizontal}/>
-        <div className={styles.mainContainer}>
-          <div className={styles.leftMenu}>
-            <h1 className={styles.title}>Registros</h1>
-            <div className={styles.depthFrameUsuarios}>
-                <img className={styles.usuariosImage} src="public/../../usuarios.png" alt="Usuarios"/>
-                <Link href="/usuarios/home">
-                    <p className={styles.usuariosText}>Usuarios</p>
-                </Link>
-            </div>
-            <div className={styles.depthFramePerfiles}>
-                <img className={styles.perfilesImage} src="public/../../perfiles.png" alt="Perfiles"/>
-                <Link href="/perfiles/home">
-                  <p className={styles.perfilesText}>Perfiles</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameProductos}>
-                <img className={styles.productosImage} src="public/../../productos.png" alt="Productos"/>
-                <p className={styles.productosText}>Productos</p>
-            </div>
-            <div className={styles.depthFrameClientes}>
-                <img className={styles.clientesImage} src="public/../../clientes.png" alt="Clientes"/>
-                <Link href="/clientes/home">
-                  <p className={styles.clientesText}>Clientes</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameServicios}>
-                <img className={styles.serviciosImage} src="public/../../servicios.png" alt="Servicios"/>
-                <Link href="/servicios/home">
-                    <p className={styles.serviciosText}>Servicios</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameCotizaciones}>
-                <img className={styles.cotizacionesImage} src="public/../../cotizaciones.png" alt="Cotizaciones"/>
-                <Link href="/cotizaciones/home">
-                  <p className={styles.cotizacionesText}>Cotizaciones</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameFacturas}>
-                <img className={styles.facturasImage} src="public/../../facturas.png" alt="Facturas"/>
-                <Link href="/facturas/home">
-                  <p className={styles.facturasText}>Facturas</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameCuentasPorCobrar}>
-                <img className={styles.cuentasPorCobrarImage} src="public/../../cuentasPorCobrar.png" alt="Cuentas por cobrar"/>
-                <Link href="/cuentas-a-cobrar/home">
-                  <p className={styles.cuentasPorCobrarText}>Cuentas Por Cobrar</p>
-                </Link>
-            </div>
-          </div>
-          <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
-          <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Editar Producto</h1>
-          <label className={styles.nombreProducto}>Nombre del producto</label>
-          <input className={styles.inputNombreProducto} type="text" placeholder="Nombre del producto"/>
-          <label className={styles.cantidadStock}>Cantidad en stock</label>
-          <input className={styles.inputCantidadStock} type="text" placeholder="Cantidad en stock"/>
-          <label className={styles.tipoProducto}>Tipo de producto</label>
-          <select className={styles.dropdown}>
-            <option value="0">Seleccione un tipo de producto</option>
-            <option value="1">Producto 1</option>
-            <option value="2">Producto 2</option>
-          </select>
-          <label className={styles.precioProducto}>Precio del producto</label>
-          <input className={styles.inputPrecioProducto} type="text" placeholder="$0.00"/>
-          <label className={styles.proveedorProducto}>Proveedor del producto</label>
-          <input className={styles.inputProveedorProducto} type="text" placeholder="Proveedor del producto"/>
-          <label className={styles.imagenProducto}>Imagen del producto</label>
-          <input className={styles.inputImagenProducto} type="file" id="imagenProducto" name="imagenProducto" accept="image/**"/>
-          <button className={styles.botonGuardarCambios}>Guardar Cambios</button>
-            <Link href="/productos/home">
-                <button className={styles.botonCancelar}>Cancelar</button>
-            </Link>
-        </div>
-        </div>
-        <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
-      </div>
-    );
-};
+import { send_request } from "@/helpers/sendreq";
+import { usePageStore } from "@/store/actualPageStore";
+import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCircleNotch, faClose, faRotate, faSave, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
-export default PRODUCTOS;
+interface product{
+    ID: number,
+    product_name: string,
+    stock: number,
+    price: number,
+    isVisible: number,
+    category_name: string
+}
+
+interface category{
+    ID: number,
+    category_name: string
+}
+
+interface form{
+    product_name: string,
+    stock: number,
+    category_id: number,
+    price: string
+    File: string,
+    url_image: string
+}
+
+function ProductosCreate() {
+    const setUrl = usePageStore((state) => state.changeUrl);
+    const [products, setProducts] = useState<product[]>([]);
+    const [category, setCategory] = useState<category[]>([]);
+    const [formData, setFormData] = useState({
+        product_name: "",
+        stock: 0,
+        category_id: 0,
+        price: 0,
+        File: "",
+        url_image: ""
+    });
+
+    const [available, setAvailable] = useState(null);
+    let inputFile = useRef(null);
+
+    /*useEffect(()=>{
+        setUrl('/productos');
+        
+        send_request('get', 'http://localhost:3000/products/get', null, 12345)
+        .then(({data})=>{
+            setProducts(data);
+        });
+
+        send_request('get', 'http://localhost:3000/category/get', null, 12345)
+        .then(({data})=>{
+            setCategory(data);
+        });
+      }, [])*/
+
+    function searchProduct(e: ChangeEvent<HTMLInputElement>){
+        const p = products.find(element=> element.product_name.toLowerCase() == e.target.value.toLowerCase())
+        
+        if(e.target.value.length == 0){
+            setAvailable(null);
+        }
+        
+        if(p){
+            setAvailable(false);
+        } else {
+            setAvailable(true);
+        }
+    }
+    
+    function handleChange(e: ChangeEvent<HTMLInputElement> | any){
+        const name = e.target.name;
+        const value = typeof(formData[name]) == "number" ? parseInt(e.target.value) : e.target.value;
+
+        setFormData((prev)=> ({...prev, [name]: value}))
+        
+        console.log({ ...formData, [e.target.name]: value });
+    }
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>){
+        e.preventDefault();
+
+    }
+    
+    return (<div className="min-h-screen">
+        <Link href={'/productos'} className="flex items-center font-bold gap-x-2 text-blue-500 p-5">
+            <FontAwesomeIcon icon={faArrowLeft}/>
+            <h2>VOLVER</h2>
+        </Link>
+
+        <h2 className="text-5xl font-extrabold p-5">Actualizar Producto</h2>
+
+        <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
+            <div>
+                <h2 className="text-xl">Nombre del producto</h2>
+                <input type="text" name="product_name" id=""className={available == null ? " border-2 border-slate-500 outline-none" : available ? "available" : " border-2 border-red-500 outline-none"} onChange={(e)=>{ searchProduct(e); handleChange(e) }} required/>
+                
+                {available == null ? <h3 className="text-slate-500 flex items-center gap-x-2 mt-2">
+                Buscando nombre
+                <FontAwesomeIcon icon={faCircleNotch} className="fa-spin"/>
+                </h3> : available ? <h3 className="text-green-500 flex items-center gap-x-2 mt-2">
+                Nombre disponible
+                <FontAwesomeIcon icon={faCheckCircle}/>
+                </h3> : <h3 className="text-red-500 flex items-center gap-x-2 mt-2">
+                Nombre no disponible
+                <FontAwesomeIcon icon={faCancel}/>
+                </h3>}
+            </div>
+
+            <div>
+                <h2 className="text-xl">Cantidad en stock</h2>
+                <input type="number" name="stock" id="" min={1} defaultValue={1} onChange={(e)=> handleChange(e)} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Tipo de producto</h2>
+                <select name="category_id" id="" onChange={(e)=>handleChange(e)} required>
+                    {category.length == 0 ?
+                    <option>NO CATEGORIAS</option>
+                    :category.map(cate=> <option key={cate.ID} id={"" + cate.ID} value={cate.ID}>{cate.category_name}</option> )}
+                </select>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Precio del producto</h2>
+                <input type="number" name="price" id="" min={0} defaultValue={1} onChange={(e)=>handleChange(e)} required/>
+            </div>
+
+            <input type="text" value="" name="url_image" className="hidden"/>
+
+            <div>
+                <input type="File" id="miInputDeArchivo" className="hidden" name="File" onChange={(e)=>handleChange(e)} ref={inputFile} required/>
+                <button type="submit" className="px-12 text-white rounded-lg py-2 bg-violet-500 font-bold flex gap-x-2 items-center justify-center w-[30em] hover:text-violet-500 hover:bg-white transition-all border-2 border-violet-500" onClick={()=>{
+                    if(inputFile.current){
+                        inputFile.current.click();
+                    }
+                }}>
+                    <FontAwesomeIcon icon={faUpload}/>
+                    ACTUALIZAR FOTO</button>
+            </div>
+
+            <div className="w-[30em] flex gap-x-4">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                    <FontAwesomeIcon icon={faSave}/>
+                    MODIFICAR</button>
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                    <FontAwesomeIcon icon={faCancel}/>
+                    CANCELAR</button>
+            </div>
+
+        </form>
+    </div>);
+}
+
+export default ProductosCreate;

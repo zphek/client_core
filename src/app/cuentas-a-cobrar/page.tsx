@@ -98,6 +98,7 @@ const CUENTASACOBRAR: NextPage = () => {
                 onDelete={handleDelete}
                 isDeleting={index === deletingIndex}
                 renderCell={renderCell}
+                getEditRoute={() => `/cuentas-a-cobrar/edicion`}
               />
             ))}
             </tbody>

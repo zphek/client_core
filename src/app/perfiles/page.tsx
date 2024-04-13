@@ -91,6 +91,7 @@ const PERFILES: NextPage = () => {
                   onDelete={handleDelete}
                   isDeleting={deletingIndex === index}
                   renderCell={renderCell}
+                  getEditRoute={() => `/perfiles/edicion`}
                 />
               ))}
             </tbody>

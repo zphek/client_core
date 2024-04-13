@@ -1,82 +1,99 @@
-import type { NextPage } from "next";
-import styles from "./index.module.css";
-import Link from 'next/link';
+'use client'
 
-const SERVICIOS: NextPage = () => {
+import { send_request } from "@/helpers/sendreq";
+import { usePageStore } from "@/store/actualPageStore";
+import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCircleNotch, faClose, faRotate, faSave, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+
+interface services{
+    ID: number,
+    service_name: string,
+    services_description: string,
+    price: number,
+    isVisible: boolean
+}
+
+interface form{
+    service_name: string,
+    services_description: string,
+    price: number
+}
+
+function UsuariosCreate() {
+    const setUrl = usePageStore((state) => state.changeUrl);
+    const [services, setServices] = useState<services[]>([]);
+    const [formData, setFormData] = useState({
+        service_name: "",
+        services_description: "",
+        price: 0
+    });
+
+    const [available, setAvailable] = useState(null);
+
+    /*useEffect(()=>{
+        setUrl('/usuarios');
+        
+        send_request('get', 'http://localhost:3000/products/get', null, 12345)
+        .then(({data})=>{
+            setUsers(data);
+        });
+
+        send_request('get', 'http://localhost:3000/category/get', null, 12345)
+        .then(({data})=>{
+            setProfile(data);
+        });
+      }, [])*/
+    
+    function handleChange(e: ChangeEvent<HTMLInputElement> | any){
+        const name = e.target.name;
+        const value = typeof(formData[name]) == "number" ? parseInt(e.target.value) : e.target.value;
+
+        setFormData((prev)=> ({...prev, [name]: value}))
+        
+        console.log({ ...formData, [e.target.name]: value });
+    }
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>){
+        e.preventDefault();
+    }
+    
     return (
-        <div>
-        <header className={styles.negociaCoreHeader}>
-          <img className={styles.negociaImage} src="public/../../Group 1.jpg" alt="NegociaCore"/>
-        </header>
-        <hr className={styles.dividerHorizontal}/>
-        <div className={styles.mainContainer}>
-          <div className={styles.leftMenu}>
-            <h1 className={styles.title}>Registros</h1>
-            <div className={styles.depthFrameUsuarios}>
-                <img className={styles.usuariosImage} src="public/../../usuarios.png" alt="Usuarios"/>
-                <Link href="/usuarios/home">
-                    <p className={styles.usuariosText}>Usuarios</p>
-                </Link>
-            </div>
-            <div className={styles.depthFramePerfiles}>
-                <img className={styles.perfilesImage} src="public/../../perfiles.png" alt="Perfiles"/>
-                <Link href="/perfiles/home">
-                  <p className={styles.perfilesText}>Perfiles</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameProductos}>
-                <img className={styles.productosImage} src="public/../../productos.png" alt="Productos"/>
-                <Link href="/productos/home">
-                  <p className={styles.productosText}>Productos</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameClientes}>
-                <img className={styles.clientesImage} src="public/../../clientes.png" alt="Clientes"/>
-                <Link href="/clientes/home">
-                  <p className={styles.clientesText}>Clientes</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameServicios}>
-                <img className={styles.serviciosImage} src="public/../../servicios.png" alt="Servicios"/>
-                <p className={styles.serviciosText}>Servicios</p>
-            </div>
-            <div className={styles.depthFrameCotizaciones}>
-                <img className={styles.cotizacionesImage} src="public/../../cotizaciones.png" alt="Cotizaciones"/>
-                <Link href="/cotizaciones/home">
-                  <p className={styles.cotizacionesText}>Cotizaciones</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameFacturas}>
-                <img className={styles.facturasImage} src="public/../../facturas.png" alt="Facturas"/>
-                <Link href="/facturas/home">
-                  <p className={styles.facturasText}>Facturas</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameCuentasPorCobrar}>
-                <img className={styles.cuentasPorCobrarImage} src="public/../../cuentasPorCobrar.png" alt="Cuentas por cobrar"/>
-                <Link href="/cuentas-a-cobrar/home">
-                  <p className={styles.cuentasPorCobrarText}>Cuentas Por Cobrar</p>
-                </Link>
-            </div>
-          </div>
-          <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
-          <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Editar Servicio</h1>
-          <label className={styles.nombreServicio}>Nombre del servicio</label>
-          <input className={styles.inputNombreServicio} type="text" placeholder="Nombre del servicio"/>
-          <label className={styles.descripcionServicio}>Descripción del servicio</label>
-          <textarea className={styles.inputDescripcionServicio} placeholder="Descripción del servicio"/>
-          <label className={styles.precioServicio}>Precio del servicio (mensual)</label>
-          <input className={styles.inputPrecioServicio} type="text" placeholder="$0.00"/>
-          <button className={styles.botonGuardarCambios}>Guardar Cambios</button>
-            <Link href="/servicios/home">
-                <button className={styles.botonCancelar}>Cancelar</button>
-            </Link>
-        </div>
-        </div>
-        <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
-      </div>
-    );
-};
+    <div className="min-h-screen">
+        <Link href={'/servicios'} className="flex items-center font-bold gap-x-2 text-blue-500 p-5">
+            <FontAwesomeIcon icon={faArrowLeft}/>
+            <h2>VOLVER</h2>
+        </Link>
 
-export default SERVICIOS;
+        <h2 className="text-5xl font-extrabold p-5">Actualizar Servicio</h2>
+
+        <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
+            <div>
+                <h2 className="text-xl">Nombre del servicio</h2>
+                <input type="text" name="service_name" id="" onChange={(e)=>{ handleChange(e) }} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Descripción</h2>
+                <input type="text" name="services_description" id="" onChange={(e)=> handleChange(e)} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Precio del servicio (Mensual)</h2>
+                <input type="number" name="price" id="" min={0} defaultValue={1} onChange={(e)=>handleChange(e)} required/>
+            </div>
+
+            <div className="w-[30em] flex gap-x-4">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                    <FontAwesomeIcon icon={faSave}/>
+                    MODIFICAR</button>
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                    <FontAwesomeIcon icon={faCancel}/>
+                    CANCELAR</button>
+            </div>
+        </form>
+    </div>);
+}
+
+export default UsuariosCreate;

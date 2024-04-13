@@ -97,6 +97,7 @@ const FACTURAS: NextPage = () => {
                 onDelete={handleDelete}
                 isDeleting={index === deletingIndex}
                 renderCell={renderCell}
+                getEditRoute={() => `/facturas/edicion`}
               />
             ))}
             </tbody>

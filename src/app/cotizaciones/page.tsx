@@ -98,6 +98,7 @@ const COTIZACIONES: NextPage = () => {
                   onDelete={handleDelete}
                   isDeleting={index === deletingIndex}
                   renderCell={renderCell}
+                  getEditRoute={() => `/cotizaciones/edicion`}
                 />
               ))}
             </tbody>

@@ -95,6 +95,7 @@ const CLIENTES: NextPage = () => {
                 onDelete={handleDelete}
                 isDeleting={index === deletingIndex}
                 renderCell={renderCell}
+                getEditRoute={() => `/clientes/edicion`}
                 />
               ))}
             </tbody>

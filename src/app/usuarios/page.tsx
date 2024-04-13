@@ -101,12 +101,13 @@
                 onDelete={handleDelete}
                 isDeleting={index === deletingIndex}
                 renderCell={renderCell}
+                getEditRoute={() => `/usuarios/edicion`}
               />
             ))}
+
             </tbody>
           </table>
         </div>
-
       </div>
     );
   };

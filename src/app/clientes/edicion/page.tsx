@@ -1,84 +1,99 @@
-import type { NextPage } from "next";
-import styles from "./index.module.css";
-import Link from 'next/link';
+'use client'
 
-const CLIENTES: NextPage = () => {
+import { send_request } from "@/helpers/sendreq";
+import { usePageStore } from "@/store/actualPageStore";
+import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCircleNotch, faClose, faRotate, faSave, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+
+interface clients{
+    ID: number,
+    client_fullname: string,
+    email: string,
+    phone_number: string
+}
+
+interface form{
+    client_fullname: string,
+    email: string,
+    phone_number: string
+}
+
+function UsuariosCreate() {
+    const setUrl = usePageStore((state) => state.changeUrl);
+    const [clients, setClients] = useState<clients[]>([]);
+    const [formData, setFormData] = useState({
+        client_fullname: "",
+        email: "",
+        phone_number: ""
+    });
+
+    const [available, setAvailable] = useState(null);
+
+    /*useEffect(()=>{
+        setUrl('/usuarios');
+        
+        send_request('get', 'http://localhost:3000/products/get', null, 12345)
+        .then(({data})=>{
+            setUsers(data);
+        });
+
+        send_request('get', 'http://localhost:3000/category/get', null, 12345)
+        .then(({data})=>{
+            setProfile(data);
+        });
+      }, [])*/
+    
+    function handleChange(e: ChangeEvent<HTMLInputElement> | any){
+        const name = e.target.name;
+        const value = typeof(formData[name]) == "number" ? parseInt(e.target.value) : e.target.value;
+
+        setFormData((prev)=> ({...prev, [name]: value}))
+        
+        console.log({ ...formData, [e.target.name]: value });
+    }
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>){
+        e.preventDefault();
+    }
+    
     return (
-        <div>
-        <div>
-        <header className={styles.negociaCoreHeader}>
-          <img className={styles.negociaImage} src="public/../../Group 1.jpg" alt="NegociaCore"/>
-        </header>
-        <hr className={styles.dividerHorizontal}/>
-        <div className={styles.mainContainer}>
-          <div className={styles.leftMenu}>
-            <h1 className={styles.title}>Registros</h1>
-            <div className={styles.depthFrameUsuarios}>
-                <img className={styles.usuariosImage} src="public/../../usuarios.png" alt="Usuarios"/>
-                <Link href="/usuarios/home">
-                    <p className={styles.usuariosText}>Usuarios</p>
-                </Link>
-            </div>
-            <div className={styles.depthFramePerfiles}>
-                <img className={styles.perfilesImage} src="public/../../perfiles.png" alt="Perfiles"/>
-                <Link href="/perfiles/home">
-                    <p className={styles.perfilesText}>Perfiles</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameProductos}>
-                <img className={styles.productosImage} src="public/../../productos.png" alt="Productos"/>
-                <Link href="/productos/home">
-                  <p className={styles.productosText}>Productos</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameClientes}>
-                <img className={styles.clientesImage} src="public/../../clientes.png" alt="Clientes"/>
-                <p className={styles.clientesText}>Clientes</p>
-            </div>
-            <div className={styles.depthFrameServicios}>
-                <img className={styles.serviciosImage} src="public/../../servicios.png" alt="Servicios"/>
-                <Link href="/servicios/home">
-                    <p className={styles.serviciosText}>Servicios</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameCotizaciones}>
-                <img className={styles.cotizacionesImage} src="public/../../cotizaciones.png" alt="Cotizaciones"/>
-                <Link href="/cotizaciones/home">
-                    <p className={styles.cotizacionesText}>Cotizaciones</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameFacturas}>
-                <img className={styles.facturasImage} src="public/../../facturas.png" alt="Facturas"/>
-                <Link href="/facturas/home">
-                  <p className={styles.facturasText}>Facturas</p>
-                </Link>
-            </div>
-            <div className={styles.depthFrameCuentasPorCobrar}>
-                <img className={styles.cuentasPorCobrarImage} src="public/../../cuentasPorCobrar.png" alt="Cuentas por cobrar"/>
-                <Link href="/cuentas-a-cobrar/home">
-                    <p className={styles.cuentasPorCobrarText}>Cuentas Por Cobrar</p>
-                </Link>
-            </div>
-          </div>
-          <img className={styles.dividerVertical} src="public/../../vertical line.png" alt="vertical line"/>
-          <div className={styles.rightView}>
-          <h1 className={styles.titleRightView}>Edtiar Cliente</h1>
-          <label className={styles.nombreCliente}>Nombre del cliente</label>
-          <input className={styles.inputNombreCliente} type="text" placeholder="Nombre del cliente"/>
-          <label className={styles.correoCliente}>Correo electrónico del cliente</label>
-          <input className={styles.inputCorreoCliente} type="text" placeholder="nombredelcliente@gmail.com"/>
-          <label className={styles.numeroTelefonoCliente}>Número de teléfono del cliente</label>
-          <input className={styles.inputNumeroTelefonoCliente} type="text" placeholder="000-000-0000"/>
-            <Link href="/clientes/home">
-                <button className={styles.botonCancelar}>Cancelar</button>
-            </Link>
-                <button className={styles.botonGuardarCambios}>Guardar Cambios</button>
-        </div>
-        </div>
-        <img className={styles.footerImage} src="public/../../footer.png" alt="footer"/>
-      </div>
-        </div>
-    );
-};
+    <div className="min-h-screen">
+        <Link href={'/clientes'} className="flex items-center font-bold gap-x-2 text-blue-500 p-5">
+            <FontAwesomeIcon icon={faArrowLeft}/>
+            <h2>VOLVER</h2>
+        </Link>
 
-export default CLIENTES;
+        <h2 className="text-5xl font-extrabold p-5">Actualizar Cliente</h2>
+
+        <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
+            <div>
+                <h2 className="text-xl">Nombre del cliente</h2>
+                <input type="text" name="client_fullname" id="" onChange={(e)=>{ handleChange(e) }} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Correo electrónico</h2>
+                <input type="text" name="email" id="" onChange={(e)=> handleChange(e)} required/>
+            </div>
+
+            <div>
+                <h2 className="text-xl">Número telefónico</h2>
+                <input type="text" name="phone_number" id="" onChange={(e)=>handleChange(e)} required/>
+            </div>
+
+            <div className="w-[30em] flex gap-x-4">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                    <FontAwesomeIcon icon={faSave}/>
+                    MODIFICAR</button>
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                    <FontAwesomeIcon icon={faCancel}/>
+                    CANCELAR</button>
+            </div>
+
+        </form>
+    </div>);
+}
+
+export default UsuariosCreate;
