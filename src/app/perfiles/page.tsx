@@ -7,27 +7,49 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { send_request } from "@/helpers/sendreq";
 import Link from "next/link";
+import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 
 interface profile{
-  ID: number,
   profile_role: string,
   role_description: string,
-  createdAt: string
 }
 
 const PERFILES: NextPage = () => {
+    const [profiles, setProfiles] = useState<profile[]>([
+      { profile_role: 'Admin', role_description: 'Administrador de la aplicacion' },
+      { profile_role: 'User', role_description: 'Usuario de la aplicacion' },
+      { profile_role: 'Guest', role_description: 'Invitado de la aplicacion' }
+    ]);
+
     const setUrl = usePageStore((state) => state.changeUrl);
-    const [profiles, setProfiles] = useState<profile[]>([]);
 
-    useEffect(()=>{ 
+    useEffect(()=>{
       setUrl(window.location.pathname);
-
-      send_request('get', 'http://localhost:3000/profiles/get', null, 12345)
-      .then(({data}) =>{
-        console.log(data)
-        setProfiles(data);
-      });
     }, [])
+
+    const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+
+    const handleDelete = (index: number) => {
+      setDeletingIndex(index);
+
+      setTimeout(() => {
+        setProfiles((prevItems) => prevItems.filter((_, i) => i !== index));
+        setDeletingIndex(null);
+      }, 500); // Adjust the delay as needed
+    };
+
+    const renderCell = (key: keyof profile, value: profile[keyof profile]) => {
+      switch (key) {
+        case 'profile_role':
+          return (
+            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
+              {value}
+            </div>
+          );
+        default:
+          return <>{value}</>;
+      }
+    };
 
     return (
       <div className="flex flex-col justif-around w-[100%] bg-slate-200/60 max-h-screen">
@@ -55,27 +77,22 @@ const PERFILES: NextPage = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NOMBRE</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DESCRIPTION</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">FECHA DE CREACION</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DESCRIPCION</th> 
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            
-            {profiles.length > 0 ? profiles.map(profile=>(
-              <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">{profile.ID}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{profile.profile_role}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{profile.role_description || "..."}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{profile.createdAt}</td>
-                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                    <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                    <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                  </td>
-              </tr>
-            )) : (<h2></h2>)}
+              {profiles.map((profile, index) => (
+                <SlideOutRow
+                  key={index}
+                  index={index}
+                  item={profile}
+                  onDelete={handleDelete}
+                  isDeleting={deletingIndex === index}
+                  renderCell={renderCell}
+                />
+              ))}
             </tbody>
           </table>
         </div>

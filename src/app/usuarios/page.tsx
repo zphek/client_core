@@ -45,6 +45,19 @@
       }, 500); // Adjust the delay as needed
     };
 
+    const renderCell = (key: keyof User, value: User[keyof User]) => {
+      switch (key) {
+        case 'role':
+          return (
+            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
+              {value}
+            </div>
+          );
+        default:
+          return <>{value}</>;
+      }
+    };
+
     return (
       <div className="flex flex-col justif-around w-[100%] bg-slate-200/60 max-h-screen">
         <div className="h-10 bg-white">
@@ -82,11 +95,12 @@
             <tbody className="bg-white divide-y divide-gray-200">
             {data.map((item, index) => (
               <SlideOutRow
-                key={index}
+                key={index} 
                 index={index}
                 item={item}
                 onDelete={handleDelete}
                 isDeleting={index === deletingIndex}
+                renderCell={renderCell}
               />
             ))}
             </tbody>

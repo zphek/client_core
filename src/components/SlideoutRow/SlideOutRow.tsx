@@ -2,14 +2,21 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPencil } from '@fortawesome/free-solid-svg-icons';
 
-interface SlideOutRowProps {
+interface SlideOutRowProps<T extends Record<string, any>>{
   index: number;
-  item: { name: string; username: string; email: string; role: string; lastConnection: string; };
+  item: T;
   onDelete: (index: number) => void;
   isDeleting: boolean;
+  renderCell: (key: keyof T, value: T[keyof T]) => React.ReactNode;
 }
 
-const SlideOutRow: React.FC<SlideOutRowProps> = ({ index, item, onDelete, isDeleting }) => {
+const SlideOutRow = <T extends Record<string, any>>({
+  index,
+  item,
+  onDelete,
+  isDeleting,
+  renderCell,
+}: SlideOutRowProps<T>) => {
   const handleDelete = () => {
     onDelete(index);
   };
@@ -20,15 +27,11 @@ const SlideOutRow: React.FC<SlideOutRowProps> = ({ index, item, onDelete, isDele
         isDeleting ? 'translate-x-full' : ''
       }`}
     >
-      <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-      <td className="px-6 py-4 whitespace-nowrap">{item.username}</td>
-      <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-          {item.role}
-        </div>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">{item.lastConnection}</td>
+{Object.entries(item).map(([key, value]) => (
+        <td key={key} className="px-6 py-4 whitespace-nowrap">
+          {renderCell(key as keyof T, value)}
+        </td>
+      ))}
       <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
         <FontAwesomeIcon
           icon={faTrash}

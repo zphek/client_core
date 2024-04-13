@@ -2,17 +2,56 @@
 
 import type { NextPage } from "next";
 import { usePageStore } from "@/store/actualPageStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
+
+interface Client {
+  name: string;
+  username: string;
+  email: string;
+  phone: string;
+}
 
 const CLIENTES: NextPage = () => {
+    const [data, setData] = useState<Client[]>([
+      { name: 'Bernardo Baez 1', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
+      { name: 'Bernardo Baez 2', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
+      { name: 'Bernardo Baez 3', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
+      { name: 'Bernardo Baez 4', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'}
+    ]);
+
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
     }, [])
+
+    const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+
+    const handleDelete = (index: number) => {
+      setDeletingIndex(index);
+
+      setTimeout(() => {
+        setData((prevItems) => prevItems.filter((_, i) => i !== index));
+        setDeletingIndex(null);
+      }, 500); // Adjust the delay as needed
+    };
+
+    const renderCell = (key: keyof Client, value: Client[keyof Client]) => {
+      switch (key) {
+        case 'username':
+          return (
+            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
+              {value}
+            </div>
+          );
+        default:
+          return <>{value}</>;
+      }
+    };
 
     return (
       <div className="flex flex-col justif-around w-[100%] bg-slate-200/60 max-h-screen">
@@ -43,235 +82,21 @@ const CLIENTES: NextPage = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombres</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last connection</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
-  
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Bernardo Baez</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardob</td>
-                <td className="px-6 py-4 whitespace-nowrap">bernardbaez.beno@gmail.com</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-                      Admin  
-                    </div>
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap">3 dias</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
-                  <FontAwesomeIcon icon={faTrash} size="lg" className="hover:text-red-500 transition-all "/>
-                  <FontAwesomeIcon icon={faPencil} size="lg" className="hover:text-blue-500 transition-all"/>
-                </td>
-              </tr>
+              {data.map((item, index) =>(
+                <SlideOutRow
+                key={index}
+                index={index}
+                item={item}
+                onDelete={handleDelete}
+                isDeleting={index === deletingIndex}
+                renderCell={renderCell}
+                />
+              ))}
             </tbody>
           </table>
         </div>
