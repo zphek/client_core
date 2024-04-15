@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 import { render } from "react-dom";
+import { send_request } from "@/helpers/sendreq";
 
 interface Service {
   name: string;
@@ -16,19 +17,17 @@ interface Service {
 }
 
 const SERVICIOS: NextPage = () => {
-    const [data, setData] = useState<Service[]>([
-      { name: 'Corte de cabello', decripcion: 'Corte de cabello para hombre', price: 'RD$ 500.00' },
-      { name: 'Corte de cabello', decripcion: 'Corte de cabello para hombre', price: 'RD$ 500.00' },
-      { name: 'Corte de cabello', decripcion: 'Corte de cabello para hombre', price: 'RD$ 500.00' },
-      { name: 'Corte de cabello', decripcion: 'Corte de cabello para hombre', price: 'RD$ 500.00' },
-      { name: 'Corte de cabello', decripcion: 'Corte de cabello para hombre', price: 'RD$ 500.00' },
-      { name: 'Corte de cabello', decripcion: 'Corte de cabello para hombre', price: 'RD$ 500.00' }
-    ]);
+    const [data, setData] = useState<Service[]>([]);
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
+
+      send_request("get", "http://34.229.4.148:3000/services/get", null, 12345)
+      .then(({data})=>{
+        setData(data);
+      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -81,10 +80,11 @@ const SERVICIOS: NextPage = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombres</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripcion</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                <th className="px-6 py-5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha creacion</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">

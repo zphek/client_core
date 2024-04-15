@@ -7,6 +7,7 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
+import { send_request } from "@/helpers/sendreq";
 
 interface Factura {
   ID: number,
@@ -29,6 +30,11 @@ const FACTURAS: NextPage = () => {
 
     useEffect(()=>{
       setUrl(window.location.pathname);
+
+      send_request("get", "http://33.:3000/invoices/get", null, 12345)
+      .then(({data})=>{
+        setData(data);
+      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);

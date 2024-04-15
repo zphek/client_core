@@ -34,6 +34,7 @@ function ProductosCreate() {
     const setUrl = usePageStore((state) => state.changeUrl);
     const [products, setProducts] = useState<product[]>([]);
     const [category, setCategory] = useState<category[]>([]);
+    const [alert, setAlert] = useState(false);
     const [formData, setFormData] = useState({
         product_name: "",
         stock: 0,
@@ -49,12 +50,12 @@ function ProductosCreate() {
     useEffect(()=>{
         setUrl('/productos');
         
-        send_request('get', 'http://localhost:3000/products/get', null, 12345)
+        send_request('get', 'http://34.229.4.148:3000/products/get', null, 12345)
         .then(({data})=>{
             setProducts(data);
         });
 
-        send_request('get', 'http://localhost:3000/category/get', null, 12345)
+        send_request('get', 'http://34.229.4.148:3000/category/get', null, 12345)
         .then(({data})=>{
             setCategory(data);
         });
@@ -86,6 +87,10 @@ function ProductosCreate() {
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
+        send_request('post', 'http://34.229.4.148:3000/products/create', formData, 12345)
+        .then((response)=>{
+            console.log(response);
+        });
     }
     
     return (<div className="min-h-screen">
@@ -146,10 +151,10 @@ function ProductosCreate() {
             </div>
 
             <div className="w-[30em] flex gap-x-4">
-                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500" type="submit">
                     <FontAwesomeIcon icon={faSave}/>
                     CREAR</button>
-                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500" type="reset">
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>
