@@ -48,19 +48,14 @@ function UsuariosCreate() {
     const [showPassword, setShowPassword] = useState(false);
     const [available, setAvailable] = useState(null);
 
-    /*useEffect(()=>{
+    useEffect(()=>{
         setUrl('/usuarios');
         
-        send_request('get', 'http://localhost:3000/products/get', null, 12345)
+        send_request('get', 'http://34.229.4.148:300/users/get', null, 12345)
         .then(({data})=>{
             setUsers(data);
         });
-
-        send_request('get', 'http://localhost:3000/category/get', null, 12345)
-        .then(({data})=>{
-            setProfile(data);
-        });
-      }, [])*/
+      }, [])
 
     function searchUser(e: ChangeEvent<HTMLInputElement>){
         const p = users.find(element=> element.username.toLowerCase() == e.target.value.toLowerCase())

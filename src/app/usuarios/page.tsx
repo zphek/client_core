@@ -9,24 +9,31 @@
   import { useEffect, useState } from "react";
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faAdd, faPencil, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+  import { send_request } from "@/helpers/sendreq"; 
+import { get } from "http";
 
   interface User {
-    name: string;
+    ID: number;
+    full_name: string;
     username: string;
     email: string;
-    role: string;
+    profile_type: number;
     lastConnection: string;
   }
 
   const USUARIOS: NextPage = () => {
-    const [data, setData] = useState<User[]>([
-      { name: 'Bernardo Baez 1', username: 'bernardob', email: 'bernardbaez.beno@gmail.com', role: 'Admin', lastConnection: '3 dias', },
-      { name: 'Bernardo Baez 2', username: 'bernardob', email: 'bernardbaez.beno@gmail.com', role: 'Admin', lastConnection: '3 dias', },
-      { name: 'Bernardo Baez 3', username: 'bernardob', email: 'bernardbaez.beno@gmail.com', role: 'Admin', lastConnection: '3 dias', },
-      { name: 'Bernardo Baez 4', username: 'bernardob', email: 'bernardbaez.beno@gmail.com', role: 'Admin', lastConnection: '3 dias', },
-      { name: 'Bernardo Baez 5', username: 'bernardob', email: 'bernardbaez.beno@gmail.com', role: 'Admin', lastConnection: '3 dias', },
-      { name: 'Bernardo Baez 6', username: 'bernardob', email: 'bernardbaez.beno@gmail.com', role: 'Admin', lastConnection: '3 dias', },
-    ]);
+    const [data, setData] = useState<User[]>([]);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    useEffect(()=>{
+      setUrl(window.location.pathname);
+
+      send_request('get', 'http://34.229.4.148:3000/users/get', null, 12345)
+      .then(({data})=>{
+        setData(data);
+      })
+    }, [])
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
@@ -46,16 +53,35 @@
     };
 
     const renderCell = (key: keyof User, value: User[keyof User]) => {
-      switch (key) {
-        case 'role':
-          return (
-            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-              {value}
-            </div>
-          );
+  switch (key) {
+    case 'profile_type':
+      let roleText;
+      switch (value) {
+        case 1:
+          roleText = 'Admin';
+          break;
+        case 2:
+          roleText = 'Employee';
+          break;
+        case 3:
+          roleText = 'Customer';
+          break;
         default:
-          return <>{value}</>;
+          roleText = 'Default';
       }
+      return (
+        <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
+          {roleText}
+        </div>
+      );
+    default:
+      return <>{value}</>;
+  }
+};
+
+    const getEditRoute = (item: User) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
     };
 
     return (
@@ -88,23 +114,35 @@
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last connection</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item, index) => (
-              <SlideOutRow
-                key={index} 
-                index={index}
-                item={item}
-                onDelete={handleDelete}
-                isDeleting={index === deletingIndex}
-                renderCell={renderCell}
-                getEditRoute={() => `/usuarios/edicion`}
-              />
-            ))}
-
+              {data.length > 0 ? data.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.full_name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.username}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{renderCell('profile_type', item.profile_type)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              )) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>

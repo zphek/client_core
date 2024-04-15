@@ -15,5 +15,5 @@ export async function send_request(method:string = "get", url:string, data:any =
         }
     }
     
-    //return await axios(settings);
+    return await axios(settings);
 }
