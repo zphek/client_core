@@ -7,8 +7,10 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
+import { send_request } from "@/helpers/sendreq";
 
 interface Client {
+  ID: number;
   name: string;
   username: string;
   email: string;
@@ -16,17 +18,20 @@ interface Client {
 }
 
 const CLIENTES: NextPage = () => {
-    const [data, setData] = useState<Client[]>([
-      { name: 'Bernardo Baez 1', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
-      { name: 'Bernardo Baez 2', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
-      { name: 'Bernardo Baez 3', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
-      { name: 'Bernardo Baez 4', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'}
-    ]);
+    const [data, setData] = useState<Client[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
+
+      send_request('get', 'http://34.229.4.128:3000/clients/get', null, 12345)
+      .then(({data})=>{
+        setData(data);
+      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -40,17 +45,9 @@ const CLIENTES: NextPage = () => {
       }, 500); // Adjust the delay as needed
     };
 
-    const renderCell = (key: keyof Client, value: Client[keyof Client]) => {
-      switch (key) {
-        case 'username':
-          return (
-            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-              {value}
-            </div>
-          );
-        default:
-          return <>{value}</>;
-      }
+    const getEditRoute = (item: Client) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
     };
 
     return (
@@ -87,17 +84,31 @@ const CLIENTES: NextPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {data.map((item, index) =>(
-                <SlideOutRow
-                key={index}
-                index={index}
-                item={item}
-                onDelete={handleDelete}
-                isDeleting={index === deletingIndex}
-                renderCell={renderCell}
-                getEditRoute={() => `/clientes/edicion`}
-                />
-              ))}
+            {data.length > 0 ? data.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.username}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.phone}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              )) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>

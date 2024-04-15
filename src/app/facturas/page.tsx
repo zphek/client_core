@@ -7,6 +7,7 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
+import { send_request } from "@/helpers/sendreq";
 
 interface Factura {
   ID: number,
@@ -16,19 +17,20 @@ interface Factura {
 }
 
 const FACTURAS: NextPage = () => {
-    const [data, setData] = useState<Factura[]>([
-      { ID: 1, client: 'Bernardo Baez 1', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 2, client: 'Bernardo Baez 2', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 3, client: 'Bernardo Baez 3', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 4, client: 'Bernardo Baez 4', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 5, client: 'Bernardo Baez 5', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 6, client: 'Bernardo Baez 6', date: '2021-10-10', total_amount: '$1000.00', },
-    ]);
+    const [data, setData] = useState<Factura[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
+
+      send_request('get', 'http://34.229.4.128:3000/invoice/get', null, 12345)
+      .then(({data})=>{
+        setData(data);
+      }).catch((err)=> console.log(err))
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -53,6 +55,11 @@ const FACTURAS: NextPage = () => {
         default:
           return <>{value}</>;
       }
+    };
+
+    const getEditRoute = (item: Factura) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
     };
 
     return (
@@ -89,17 +96,31 @@ const FACTURAS: NextPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item, index) => (
-              <SlideOutRow
-                key={index} 
-                index={index}
-                item={item}
-                onDelete={handleDelete}
-                isDeleting={index === deletingIndex}
-                renderCell={renderCell}
-                getEditRoute={() => `/facturas/edicion`}
-              />
-            ))}
+            {data.length > 0 ? data.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.ID}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.client}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.total_amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              )) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>

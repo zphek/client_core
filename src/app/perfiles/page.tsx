@@ -10,16 +10,24 @@ import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 
 interface profile{
+  ID: number,
   profile_role: string,
-  role_description: string,
+  role_description: string
 }
 
 const PERFILES: NextPage = () => {
-    const [profiles, setProfiles] = useState<profile[]>([
-      { profile_role: 'Admin', role_description: 'Administrador de la aplicacion' },
-      { profile_role: 'User', role_description: 'Usuario de la aplicacion' },
-      { profile_role: 'Guest', role_description: 'Invitado de la aplicacion' }
-    ]);
+    const [profiles, setProfiles] = useState<profile[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
+    useEffect(()=>{
+      setUrl(window.location.pathname);
+
+      send_request('get', 'http://34.229.4.148:3000/profiles/get', null, 12345)
+      .then(({data})=>{
+        setProfiles(data);
+      })
+    }, [])
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
@@ -46,10 +54,24 @@ const PERFILES: NextPage = () => {
               {value}
             </div>
           );
+        case 'role_description':
+          // Verifica si value es una cadena vacía o falsy
+          if (!value) {
+            // Si es así, muestra el texto predeterminado
+            return <span>Descripción no disponible</span>;
+          }
+          // Si value tiene un valor, muéstralo
+          return <>{value}</>;
         default:
           return <>{value}</>;
       }
     };
+
+    const getEditRoute = (item: profile) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
+    };
+
 
     return (
       <div className="flex flex-col justif-around w-[100%] bg-slate-200/60 max-h-screen">
@@ -83,17 +105,29 @@ const PERFILES: NextPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {profiles.map((profile, index) => (
-                <SlideOutRow
-                  key={index}
-                  index={index}
-                  item={profile}
-                  onDelete={handleDelete}
-                  isDeleting={deletingIndex === index}
-                  renderCell={renderCell}
-                  getEditRoute={() => `/perfiles/edicion`}
-                />
-              ))}
+            {profiles.length > 0 ? profiles.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{renderCell('profile_role', item.profile_role)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{renderCell('role_description', item.role_description)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              )) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
