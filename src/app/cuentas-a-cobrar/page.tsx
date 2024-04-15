@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
+import { send_request } from "@/helpers/sendreq"; 
 
 interface CuentaPorCobrar {
   ID: number,
@@ -17,18 +18,18 @@ interface CuentaPorCobrar {
 }
 
 const CUENTASACOBRAR: NextPage = () => {
-    const [data, setData] = useState<CuentaPorCobrar[]>([
-      { ID: 1, invoice: 1, amount: '$1000.00', date: '2021-10-10', status: 'Pendiente', },
-      { ID: 2, invoice: 2, amount: '$1000.00', date: '2021-10-10', status: 'Pendiente', },
-      { ID: 3, invoice: 3, amount: '$1000.00', date: '2021-10-10', status: 'Pendiente', },
-      { ID: 4, invoice: 4, amount: '$1000.00', date: '2021-10-10', status: 'Pendiente', },
-      { ID: 5, invoice: 5, amount: '$1000.00', date: '2021-10-10', status: 'Pendiente', },
-      { ID: 6, invoice: 6, amount: '$1000.00', date: '2021-10-10', status: 'Pendiente', },
-    ]);
+    const [data, setData] = useState<CuentaPorCobrar[]>([]);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
+      send_request('get', 'http://34.229.4.148:3000/accounts-receivable/get', null, 12345)
+      .then(({data})=>{
+        setData(data);
+      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -42,17 +43,10 @@ const CUENTASACOBRAR: NextPage = () => {
       }, 500); // Adjust the delay as needed
     };
 
-    const renderCell = (key: keyof CuentaPorCobrar, value: CuentaPorCobrar[keyof CuentaPorCobrar]) => {
-      switch (key) {
-        case 'ID':
-          return (
-            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-              {value}
-            </div>
-          );
-        default:
-          return <>{value}</>;
-      }
+    
+    const getEditRoute = (item: CuentaPorCobrar) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
     };
 
     return (
@@ -90,17 +84,32 @@ const CUENTASACOBRAR: NextPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item, index) => (
-              <SlideOutRow
-                key={index} 
-                index={index}
-                item={item}
-                onDelete={handleDelete}
-                isDeleting={index === deletingIndex}
-                renderCell={renderCell}
-                getEditRoute={() => `/cuentas-a-cobrar/edicion`}
-              />
-            ))}
+            {data.length > 0 ? data.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.ID}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.invoice}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.status}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              )) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>

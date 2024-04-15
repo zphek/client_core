@@ -26,6 +26,9 @@ import { get } from "http";
     const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const setUrl = usePageStore((state) => state.changeUrl);
+    
     useEffect(()=>{
       setUrl(window.location.pathname);
 
@@ -34,8 +37,6 @@ import { get } from "http";
         setData(data);
       })
     }, [])
-
-    const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
