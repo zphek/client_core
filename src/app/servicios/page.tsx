@@ -7,6 +7,10 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
+<<<<<<< HEAD
+=======
+import { render } from "react-dom";
+>>>>>>> eab0f91 (...)
 import { send_request } from "@/helpers/sendreq";
 
 interface Service {
@@ -18,16 +22,21 @@ interface Service {
 }
 
 const SERVICIOS: NextPage = () => {
+<<<<<<< HEAD
     const [data, setData] = useState<Service[]>([]);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
+=======
+    const [data, setData] = useState<Service[]>();
+>>>>>>> eab0f91 (...)
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
 
+<<<<<<< HEAD
       send_request('get', 'http://34.229.4.128:3000/services/get', null, 12345)
       .then(({data})=>{
         setData(data);
@@ -35,6 +44,12 @@ const SERVICIOS: NextPage = () => {
       .catch(error=>{
 
       })
+=======
+      send_request("get", "http://34.229.4.148:3000/services/get", null, 12345)
+      .then(({data})=>{
+        setData(data);
+      })
+>>>>>>> eab0f91 (...)
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
