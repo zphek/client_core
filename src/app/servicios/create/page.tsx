@@ -32,19 +32,15 @@ function UsuariosCreate() {
 
     const [available, setAvailable] = useState(null);
 
-    /*useEffect(()=>{
-        setUrl('/usuarios');
+    useEffect(()=>{
+        setUrl('/servicios');
         
-        send_request('get', 'http://localhost:3000/products/get', null, 12345)
-        .then(({data})=>{
-            setUsers(data);
-        });
+        // send_request('get', 'http://localhost:3000/products/get', null, 12345)
+        // .then(({data})=>{
+        //     setUsers(data);
+        // });
 
-        send_request('get', 'http://localhost:3000/category/get', null, 12345)
-        .then(({data})=>{
-            setProfile(data);
-        });
-      }, [])*/
+      }, [])
     
     function handleChange(e: ChangeEvent<HTMLInputElement> | any){
         const name = e.target.name;

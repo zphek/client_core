@@ -27,10 +27,10 @@ const FACTURAS: NextPage = () => {
     useEffect(()=>{
       setUrl(window.location.pathname);
 
-      send_request('get', 'http://34.229.4.128:3000/invoice/get', null, 12345)
+      send_request("get", "http://33.:3000/invoices/get", null, 12345)
       .then(({data})=>{
         setData(data);
-      }).catch((err)=> console.log(err))
+      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
