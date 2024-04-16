@@ -1,5 +1,6 @@
 'use client'
 
+import SuccessAlert from "@/components/SuccessAlert";
 import { send_request } from "@/helpers/sendreq";
 import { usePageStore } from "@/store/actualPageStore";
 import { faEye, faEyeSlash, faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCircleNotch, faClose, faRotate, faSave, faUpload } from "@fortawesome/free-solid-svg-icons";
@@ -45,6 +46,7 @@ function UsuariosCreate() {
         profile_type: 0
     });
 
+    const [alert, setAlert] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [available, setAvailable] = useState(null);
 
@@ -88,9 +90,15 @@ function UsuariosCreate() {
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        send_request("post", "http://34.229.4.148:3000/auth/register", formData, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7IklEIjoyLCJ1c2VybmFtZSI6ImJlcm5hcmRvIiwiZnVsbF9uYW1lIjoiQmVybmFyZG8gQmFleiIsInVzZXJfcGFzc3dvcmQiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOls0OSw1MCw1MSw1Ml19LCJlbWFpbCI6ImJlcm5hcmRvQGdtYWlsLmNvbSIsInBob25lX251bWJlciI6IjgwOTQ5NzE4MDMiLCJwcm9maWxlX3R5cGUiOjEsImNsaWVudF9pZCI6MiwiY3JlYXRlZEF0IjoiMjAyNC0wMy0xNFQwMDowMDowMC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0wMy0xNFQwMDowMDowMC4wMDBaIn0sInByaXZpbGVnZXMiOlsiQUxMIl0sImlhdCI6MTcxMzIwNzc5NCwiZXhwIjoxNzEzMjE0OTk0fQ.9FPFCJ3KZIlNuQKOMY56IbpOthdVFG1zjwitYC3WDuo")
+        send_request("post", "http://34.229.4.148:3000/auth/register", formData, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7IklEIjoyLCJ1c2VybmFtZSI6ImJlcm5hcmRvIiwiZnVsbF9uYW1lIjoiQmVybmFyZG8gQmFleiIsInVzZXJfcGFzc3dvcmQiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOls0OSw1MCw1MSw1Ml19LCJlbWFpbCI6ImJlcm5hcmRvQGdtYWlsLmNvbSIsInBob25lX251bWJlciI6IjgwOTQ5NzE4MDMiLCJwcm9maWxlX3R5cGUiOjEsImNsaWVudF9pZCI6MiwiY3JlYXRlZEF0IjoiMjAyNC0wMy0xNFQwMDowMDowMC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0wMy0xNFQwMDowMDowMC4wMDBaIn0sInByaXZpbGVnZXMiOlsiQUxMIl0sImlhdCI6MTcxMzIyMzk1NCwiZXhwIjoxNzEzMjMxMTU0fQ.swS0xLCfIMP5DaT_C7e8-W0PWDaeac_jjR-bR_6LD_A")
         .then(response=>{
             console.log(response);
+            
+            setAlert(true);
+
+            setTimeout(()=>{
+                setAlert(false);
+            }, 2000)
         })
     }
 
@@ -130,7 +138,7 @@ function UsuariosCreate() {
             </div>
 
             <div>
-                <h2>Contraseña de usuario</h2>
+                <h2 className="text-xl">Contraseña de usuario</h2>
                 <div className="relative">
                     <input
                         type={showPassword ? "text" : "password"}
@@ -178,6 +186,8 @@ function UsuariosCreate() {
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>
+
+            {alert && <SuccessAlert/>}
 
         </form>
     </div>);
