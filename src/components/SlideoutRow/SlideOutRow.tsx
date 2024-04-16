@@ -27,7 +27,7 @@ const SlideOutRow = <T extends Record<string, any>>({
   const editRoute = getEditRoute(item);
 
   return (
-    <tr className={`transition-transform duration-500 ${ isDeleting ? 'translate-x-full' : ''}`}>
+    <tr className={`hover:bg-slate-100 hover:transition-[400ms] transition-transform duration-500 ${ isDeleting ? 'translate-x-full' : ''}`}>
       {Object.entries(item).map(([key, value]) => (
         <td key={key} className="px-6 py-4 whitespace-nowrap">
           {renderCell(key as keyof T, value)}

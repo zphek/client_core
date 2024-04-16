@@ -17,21 +17,14 @@ interface Factura {
 }
 
 const FACTURAS: NextPage = () => {
-    const [data, setData] = useState<Factura[]>([
-      { ID: 1, client: 'Bernardo Baez 1', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 2, client: 'Bernardo Baez 2', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 3, client: 'Bernardo Baez 3', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 4, client: 'Bernardo Baez 4', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 5, client: 'Bernardo Baez 5', date: '2021-10-10', total_amount: '$1000.00', },
-      { ID: 6, client: 'Bernardo Baez 6', date: '2021-10-10', total_amount: '$1000.00', },
-    ]);
+    const [data, setData] = useState<Factura[]>([]);
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
 
-      send_request("get", "http://33.:3000/invoices/get", null, 12345)
+      send_request("get", "http://34.229.4.148:3000/invoice/get", null, 12345)
       .then(({data})=>{
         setData(data);
       })

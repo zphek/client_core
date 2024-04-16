@@ -7,6 +7,7 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
+import { send_request } from "@/helpers/sendreq";
 
 interface Client {
   name: string;
@@ -27,6 +28,14 @@ const CLIENTES: NextPage = () => {
 
     useEffect(()=>{
       setUrl(window.location.pathname);
+
+      send_request('get', 'http://34.229.4.148:3000/clients/get', null, 12345)
+      .then(({data})=>{
+        setData(data);
+      })
+      .catch(error=>{
+
+      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);

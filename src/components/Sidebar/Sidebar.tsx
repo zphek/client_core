@@ -32,6 +32,7 @@ function Sidebar() {
     const url = usePageStore((state) => state.url);
     
     return (
+        <>{ (url != "/login" && url != "") &&
         <div className={`py-5 flex flex-col min-h-screen border-r-2 border-slate-300/20 m-0 ${hide ? 'hided_sidebar' : 'showed_sidebar w-[300px] px-12'}`}>
             <div className={`flex items-center overflow-hidden ${hide && 'hidden'}`}>
                 <Image src={"/images/cart.svg"} width={70} height={70} alt="CORElogo"/>
@@ -58,7 +59,8 @@ function Sidebar() {
             {/* <button className={"flex items-center justify-center rounded-full text-white bg-blue-700 p-2 absolute top-4 " + (hide ? "rotate-180 transition-all -right-12" : " -right-5")} onClick={()=>{ setHide(!hide) }}>
                 <FontAwesomeIcon icon={faArrowLeft} size="xl"/>
             </button> */}
-        </div>
+        </div>}
+        </>
     );
 }
 

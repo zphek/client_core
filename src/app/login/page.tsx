@@ -5,6 +5,7 @@ import Image from "next/image";
 import { send_request } from "@/helpers/sendreq";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
+import { usePageStore } from "@/store/actualPageStore";
 
 interface login{
     username: string
@@ -22,15 +23,28 @@ function Login() {
         isError: false
     })
 
+    const setUrl = usePageStore((state) => state.changeUrl);
+
+    useEffect(()=>{
+      setUrl(window.location.pathname);
+    }, [])
+
     function HandleSubmit(e:FormEvent<HTMLFormElement>){
         e.preventDefault();
     
-        send_request("post", "http://localhost:3000/auth/login", formData)
-        .then(response=>{
-            console.log(response);
+        send_request("post", "http://34.229.4.148:3000/auth/login", formData)
+        .then(({data})=>{
+            console.log(data.accessToken);
+            
+            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            
+            // Establecer la nueva cookie
+            if (data.accessToken) {
+                document.cookie = `token=${data.accessToken}; SameSite=Lax; path=/`;
+            }
         }).catch(response=>{
             const {data} = response.response;
-            console.dir(data)
+            //console.dir(data)
 
             if(data.statusCode > 300){
                 setError({
@@ -86,7 +100,6 @@ function Login() {
                         <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-500"/>
                         <h3 className="text-red-500">{error.message}</h3>
                     </div>
-
                 </>}
                 
                 <button type="submit" className="border-2 border-blue-500 bg-blue-500 py-2 rounded-lg font-sans text-white font-bold text-md hover:text-blue-500 hover:bg-white transition-[400ms] h-10">
