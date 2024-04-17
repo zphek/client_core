@@ -114,7 +114,7 @@ function UsuariosCreate() {
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        send_request('post', 'http://34.229.4.148:3000/profiles/create', formData, 12345)
+        send_request('post', 'http://34.229.4.148:3000/profiles/create', {...formData, roles: selectedPermisos}, 12345)
         .then((response)=>{
             console.log(response);
         });
@@ -148,7 +148,7 @@ function UsuariosCreate() {
 
             <div>
                 <h2 className="text-xl">Descripción</h2>
-                <input type="text" name="full_name" id="" onChange={(e)=> handleChange(e)} required/>
+                <input type="text" name="role_description" id="" onChange={(e)=> handleChange(e)} required/>
             </div>
 
             <div className="flex gap-x-10">
