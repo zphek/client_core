@@ -87,7 +87,7 @@ const SERVICIOS: NextPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            {data.length > 0 ? data.map((item, index) => (
+            {data.length > 0 && data.map((item, index) => (
                 <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
                   <td className="px-6 py-4 whitespace-nowrap">{item.service_name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.services_description}</td>
@@ -108,9 +108,7 @@ const SERVICIOS: NextPage = () => {
                     </button>
                   </td>
                 </tr>
-              )) : (
-                <></>
-              )}
+              ))  }
             </tbody>
           </table>
         </div>

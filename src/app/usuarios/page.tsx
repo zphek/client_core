@@ -9,8 +9,7 @@
   import { useEffect, useState } from "react";
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faAdd, faPencil, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
-  import { send_request } from "@/helpers/sendreq"; 
-import { get } from "http";
+  import { send_request } from "@/helpers/sendreq";
 
   interface User {
     ID: number;
