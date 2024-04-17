@@ -6,6 +6,7 @@ import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCir
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 interface product{
     ID: number,
@@ -84,12 +85,27 @@ function ProductosCreate() {
         console.log({ ...formData, [e.target.name]: value });
     }
 
+    const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
+
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
         send_request('post', 'http://34.229.4.148:3000/products/create', formData, 12345)
         .then((response)=>{
+            notify(1);
             console.log(response);
+        }). catch(err =>{
+            notify(2);
         });
     }
     

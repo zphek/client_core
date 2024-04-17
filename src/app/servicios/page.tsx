@@ -9,6 +9,7 @@ import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 import { render } from "react-dom";
 import { send_request } from "@/helpers/sendreq";
+import { ToastContainer, toast } from "react-toastify";
 
 interface Service {
   ID: number;
@@ -42,8 +43,27 @@ const SERVICIOS: NextPage = () => {
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
-    const handleDelete = (index: number) => {
+    const notify = (notiType: number) => {
+      if(notiType == 1){
+          return toast.success("The register was successfully deleted!",  {
+              position: "bottom-right"
+          });
+      } else {
+          return toast.error("The register was not deleted.",  {
+              position: "bottom-right"
+          });
+      }
+    }
+
+    const handleDelete = async(index: number) => {
+      const itemToDelete = data[index];
       setDeletingIndex(index);
+      send_request('delete', "http://34.229.4.148:3000/clients/delete/" + itemToDelete.ID, null, 12345)
+      .then(({data})=>{
+        notify(1)
+      }).catch(err=>{
+        notify(2)
+      })
 
       setTimeout(() => {
         setData((prevItems) => prevItems.filter((_, i) => i !== index));

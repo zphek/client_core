@@ -18,6 +18,7 @@
     email: string;
     profile_type: number;
     lastConnection: string;
+    isVisible: boolean;
   }
 
   const USUARIOS: NextPage = () => {
@@ -33,7 +34,7 @@
 
       send_request('get', 'http://34.229.4.148:3000/users/get', null, 12345)
       .then(({data})=>{
-        setData(data);
+        setData(data.map((data) => ({...data, isVisible:true})));
       })
     }, [])
 

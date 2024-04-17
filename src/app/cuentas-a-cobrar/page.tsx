@@ -10,10 +10,10 @@ import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 import { send_request } from "@/helpers/sendreq"; 
 
 interface CuentaPorCobrar {
-  ID: number,
-  invoice: number,
+  account_id: number,
+  invoice_id: number,
   amount: string,
-  date: string,
+  due_date: string,
   status: string
 }
 
@@ -86,10 +86,10 @@ const CUENTASACOBRAR: NextPage = () => {
             <tbody className="bg-white divide-y divide-gray-200">
             {data.length > 0 ? data.map((item, index) => (
                 <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.ID}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.invoice}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.account_id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.invoice_id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.amount}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.due_date}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.status}</td>
                   <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
                     <FontAwesomeIcon

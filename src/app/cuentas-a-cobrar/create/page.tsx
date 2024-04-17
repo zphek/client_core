@@ -6,6 +6,7 @@ import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCir
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 interface accounts_receivable{
     account_id: number,
@@ -34,6 +35,18 @@ function UsuariosCreate() {
 
     const [available, setAvailable] = useState(null);
 
+    const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
+
     useEffect(()=>{
         setUrl('/cuentas-a-cobrar');
       }, [])
@@ -52,8 +65,11 @@ function UsuariosCreate() {
 
         send_request('post', 'http://34.229.4.148:3000/accounts-receivable/create', formData, 12345)
         .then((response)=>{
+            notify(1);
             console.log(response);
-        });
+        }).catch(err=>{
+            notify(2);
+        })
     }
     
     return (
@@ -85,9 +101,9 @@ function UsuariosCreate() {
             <div>
                 <h2 className="text-xl">Estado</h2>
                 <select name="status" id="" onChange={(e)=>handleChange(e)} required>
-                    {status.length == 0 ?
-                    <option>NO MÉTODOS DE PAGO</option>
-                    :status.map(cate=> <option key={cate.ID} id={"" + cate.IñD} value={cate.ID}>{cate.category_name}</option> )}
+                    <option>NINGUNO</option>
+                    <option>Pago</option>
+                    <option>Pendiente</option>
                 </select>
             </div>
 

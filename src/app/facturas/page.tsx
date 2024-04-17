@@ -43,7 +43,7 @@ const FACTURAS: NextPage = () => {
       setTimeout(() => {
         setData((prevItems) => prevItems.filter((_, i) => i !== index));
         setDeletingIndex(null);
-      }, 500); // Adjust the delay as needed
+      }, 200);
     };
 
     const getEditRoute = (item: Factura) => {
@@ -65,7 +65,6 @@ const FACTURAS: NextPage = () => {
               <FontAwesomeIcon icon={faSearch} size="lg" className="text-gray-500/50"/>
               <input type="text" name="" id="" className="flex-grow bg-transparent outline-none" placeholder="Escribe para filtrar..."/>
             </div>
-  
             <Link href={'/facturas/create'} className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
               <FontAwesomeIcon icon={faAdd}/>
               NUEVA FACTURA
@@ -90,7 +89,7 @@ const FACTURAS: NextPage = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{item.ID}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.client_id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.invoice_date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.total_amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">${item.total_amount}.00</td>
                   <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
                     <FontAwesomeIcon
                       icon={faTrash}
