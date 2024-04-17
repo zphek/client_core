@@ -26,6 +26,7 @@
     const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(''); 
 
     const setUrl = usePageStore((state) => state.changeUrl);
     
@@ -34,7 +35,7 @@
 
       send_request('get', 'http://34.229.4.148:3000/users/get', null, 12345)
       .then(({data})=>{
-        setData(data.map((data) => ({...data, isVisible:true})));
+        setData(data.map((user: User) => ({...user, isVisible:true})));
       })
     }, [])
 
@@ -85,6 +86,12 @@
       setIsEditModalOpen(true);
     };
 
+    const filteredData = data.filter((item) =>
+      item.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
       <div className="flex flex-col justif-around w-[100%] bg-slate-200/60 max-h-screen">
         <div className="h-10 bg-white">
@@ -119,8 +126,16 @@
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {data.length > 0 ? data.map((item, index) => (
-                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+            {filteredData.filter((item) => item.isVisible).length > 0 ? (
+              filteredData
+                .filter((item) => item.isVisible)
+                .map((item, index) => (
+                  <tr
+                    key={index}
+                    className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${
+                      isDeleting[index] ? 'translate-x-full' : ''
+                    }`}
+                  >
                   <td className="px-6 py-4 whitespace-nowrap">{item.full_name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.username}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
@@ -141,7 +156,7 @@
                     </button>
                   </td>
                 </tr>
-              )) : (
+              ))) : (
                 <></>
               )}
             </tbody>
