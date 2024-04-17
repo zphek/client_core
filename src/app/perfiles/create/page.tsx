@@ -22,10 +22,6 @@ interface profile_permisions{
 interface form{
     profile_role: string,
     role_description: string,
-    create_permission: boolean,
-    read_permission: boolean,
-    update_permission: boolean,
-    delete_permission: boolean
 }
 
 interface Permiso {

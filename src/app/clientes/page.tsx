@@ -11,10 +11,9 @@ import { send_request } from "@/helpers/sendreq";
 
 interface Client {
   ID: number;
-  name: string;
-  username: string;
+  client_fullname: string;
   email: string;
-  phone: string;
+  phone_number: string;
 }
 
 const CLIENTES: NextPage = () => {
@@ -80,7 +79,6 @@ const CLIENTES: NextPage = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombres</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
@@ -89,10 +87,9 @@ const CLIENTES: NextPage = () => {
             <tbody className="bg-white divide-y divide-gray-200">
             {data.length > 0 ? data.map((item, index) => (
                 <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.username}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.client_fullname}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.phone}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.phone_number}</td>
                   <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
                     <FontAwesomeIcon
                       icon={faTrash}
