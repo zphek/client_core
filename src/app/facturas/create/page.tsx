@@ -59,6 +59,11 @@ function UsuariosCreate() {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
+
+        send_request('post', 'http://34.229.4.148:3000/invoice/create', formData, 12345)
+        .then((response)=>{
+            console.log(response);
+        });
     }
     
     return (
@@ -72,7 +77,7 @@ function UsuariosCreate() {
 
         <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
             <div>
-                <h2 className="text-xl">Nombre del cliente</h2>
+                <h2 className="text-xl">ID del cliente</h2>
                 <input type="text" name="client_name" id="" onChange={(e)=>{ handleChange(e) }} required/>
             </div>
 
@@ -97,10 +102,10 @@ function UsuariosCreate() {
             </div>
 
             <div className="w-[30em] flex gap-x-4">
-                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500" type="submit">
                     <FontAwesomeIcon icon={faSave}/>
                     CREAR</button>
-                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500" type="reset">
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>

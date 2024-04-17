@@ -34,19 +34,9 @@ function UsuariosCreate() {
 
     const [available, setAvailable] = useState(null);
 
-    /*useEffect(()=>{
-        setUrl('/usuarios');
-        
-        send_request('get', 'http://localhost:3000/products/get', null, 12345)
-        .then(({data})=>{
-            setUsers(data);
-        });
-
-        send_request('get', 'http://localhost:3000/category/get', null, 12345)
-        .then(({data})=>{
-            setProfile(data);
-        });
-      }, [])*/
+    useEffect(()=>{
+        setUrl('/cuentas-a-cobrar');
+      }, [])
     
     function handleChange(e: ChangeEvent<HTMLInputElement> | any){
         const name = e.target.name;
@@ -59,6 +49,11 @@ function UsuariosCreate() {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
+
+        send_request('post', 'http://34.229.4.148:3000/accounts-receivable/create', formData, 12345)
+        .then((response)=>{
+            console.log(response);
+        });
     }
     
     return (
@@ -97,10 +92,10 @@ function UsuariosCreate() {
             </div>
 
             <div className="w-[30em] flex gap-x-4">
-                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500" type="submit">
                     <FontAwesomeIcon icon={faSave}/>
                     CREAR</button>
-                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500" type="reset">
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>

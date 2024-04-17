@@ -11,18 +11,22 @@ import { send_request } from "@/helpers/sendreq";
 
 interface Factura {
   ID: number,
-  client: string,
-  date: string,
+  client_id: number,
+  invoice_date: string,
   total_amount: string,
+  payment_method: number,
 }
 
 const FACTURAS: NextPage = () => {
     const [data, setData] = useState<Factura[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
-      setUrl(window.location.pathname);
+      setUrl('/facturas');
 
       send_request("get", "http://34.229.4.148:3000/invoice/get", null, 12345)
       .then(({data})=>{
@@ -39,19 +43,6 @@ const FACTURAS: NextPage = () => {
         setData((prevItems) => prevItems.filter((_, i) => i !== index));
         setDeletingIndex(null);
       }, 500); // Adjust the delay as needed
-    };
-
-    const renderCell = (key: keyof Factura, value: Factura[keyof Factura]) => {
-      switch (key) {
-        case 'ID':
-          return (
-            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-              {value}
-            </div>
-          );
-        default:
-          return <>{value}</>;
-      }
     };
 
     const getEditRoute = (item: Factura) => {
@@ -96,8 +87,8 @@ const FACTURAS: NextPage = () => {
             {data.length > 0 ? data.map((item, index) => (
                 <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
                   <td className="px-6 py-4 whitespace-nowrap">{item.ID}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.client}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.client_id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.invoice_date}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.total_amount}</td>
                   <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
                     <FontAwesomeIcon

@@ -7,7 +7,6 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
-import { render } from "react-dom";
 import { send_request } from "@/helpers/sendreq";
 
 interface Service {
@@ -33,6 +32,9 @@ const SERVICIOS: NextPage = () => {
       .then(({data})=>{
         setData(data);
       })
+      .catch(error=>{
+
+      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -48,6 +50,8 @@ const SERVICIOS: NextPage = () => {
 
     const renderCell = (key: keyof Service, value: Service[keyof Service]) => {
     };
+
+    
 
     const getEditRoute = (item: Service) => {
       setSelectedUserId(item.ID);

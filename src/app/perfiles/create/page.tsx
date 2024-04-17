@@ -11,6 +11,8 @@ interface profiles{
     ID: number,
     profile_role: string,
     role_description: string
+    createdAt: Date,
+    updatedAt: Date
 }
 
 interface profile_permisions{
@@ -19,15 +21,15 @@ interface profile_permisions{
     permission_id: number
 }
 
-interface form{
-    profile_role: string,
-    role_description: string,
-}
-
 interface Permiso {
     id: number;
     nombre: string;
   }
+
+interface form{
+    profile_role: string,
+    role_description: string,
+}
   
   const permisos: Permiso[] = [
     { id: 0, nombre: 'NINGUNO' },
@@ -59,7 +61,7 @@ function UsuariosCreate() {
     }, [])
 
     useEffect(()=>{
-        setUrl('/usuarios');
+        setUrl('/perfiles');
       }, [])
 
     function searchRole(e: ChangeEvent<HTMLInputElement>){
@@ -112,7 +114,10 @@ function UsuariosCreate() {
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        console.log(selectedPermisos);
+        send_request('post', 'http://34.229.4.148:3000/profiles/create', formData, 12345)
+        .then((response)=>{
+            console.log(response);
+        });
     }
     
     return (

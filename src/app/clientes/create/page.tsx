@@ -31,19 +31,9 @@ function UsuariosCreate() {
 
     const [available, setAvailable] = useState(null);
 
-    /*useEffect(()=>{
-        setUrl('/usuarios');
-        
-        send_request('get', 'http://localhost:3000/products/get', null, 12345)
-        .then(({data})=>{
-            setUsers(data);
-        });
-
-        send_request('get', 'http://localhost:3000/category/get', null, 12345)
-        .then(({data})=>{
-            setProfile(data);
-        });
-      }, [])*/
+    useEffect(()=>{
+        setUrl('/clientes');
+      }, [])
     
     function handleChange(e: ChangeEvent<HTMLInputElement> | any){
         const name = e.target.name;
@@ -56,7 +46,12 @@ function UsuariosCreate() {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-    }
+
+        send_request('post', 'http://34.229.4.148:3000/clients/create', formData, 12345)
+        .then((response)=>{
+            console.log(response);
+        });
+    }   
     
     return (
     <div className="min-h-screen">
@@ -70,7 +65,7 @@ function UsuariosCreate() {
         <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
             <div>
                 <h2 className="text-xl">Nombre del cliente</h2>
-                <input type="text" name="client_fullname" id="" onChange={(e)=>{ handleChange(e) }} required/>
+                <input type="text" name="client_fullname" id="" onChange={(e)=>{ handleChange(e)}} required/>
             </div>
 
             <div>
