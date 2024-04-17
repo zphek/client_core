@@ -6,6 +6,7 @@ import { send_request } from "@/helpers/sendreq";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import { usePageStore } from "@/store/actualPageStore";
+import { useRouter } from "next/navigation";
 
 interface login{
     username: string
@@ -17,6 +18,8 @@ function Login() {
         username: "",
         password: ""
     });
+
+    const router = useRouter();
 
     const [error, setError] = useState({
         message: "",
@@ -36,12 +39,9 @@ function Login() {
         .then(({data})=>{
             console.log(data.accessToken);
             
-            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            
-            // Establecer la nueva cookie
-            if (data.accessToken) {
-                document.cookie = `token=${data.accessToken}; SameSite=Lax; path=/`;
-            }
+            localStorage.setItem("token", data.accessToken);
+
+            router.push("/usuarios");
         }).catch(response=>{
             const {data} = response.response;
             //console.dir(data)
