@@ -18,16 +18,13 @@ interface Factura {
 
 const FACTURAS: NextPage = () => {
     const [data, setData] = useState<Factura[]>([]);
-    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
 
-      send_request("get", "http://33.:3000/invoices/get", null, 12345)
+      send_request("get", "http://34.229.4.148:3000/invoice/get", null, 12345)
       .then(({data})=>{
         setData(data);
       })

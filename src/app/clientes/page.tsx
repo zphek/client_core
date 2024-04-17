@@ -28,9 +28,12 @@ const CLIENTES: NextPage = () => {
     useEffect(()=>{
       setUrl(window.location.pathname);
 
-      send_request('get', 'http://34.229.4.128:3000/clients/get', null, 12345)
+      send_request('get', 'http://34.229.4.148:3000/clients/get', null, 12345)
       .then(({data})=>{
         setData(data);
+      })
+      .catch(error=>{
+
       })
     }, [])
 

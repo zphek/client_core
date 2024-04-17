@@ -89,9 +89,10 @@ function UsuariosCreate() {
             <div>
                 <h2 className="text-xl">Método de pago</h2>
                 <select name="payment_method" id="" onChange={(e)=>handleChange(e)} required>
-                    {status.length == 0 ?
-                    <option>NO MÉTODOS DE PAGO</option>
-                    :status.map(cate=> <option key={cate.ID} id={"" + cate.ID} value={cate.ID}>{cate.category_name}</option> )}
+                    <option value="0">SIN METODO</option>
+                    <option value="1">Tarjeta de credito/debito</option>
+                    <option value="2">Efectivo</option>
+                    <option value="3">Transaccion</option>
                 </select>
             </div>
 
