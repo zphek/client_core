@@ -182,7 +182,6 @@ function UsuariosCreate() {
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>
-
         </form>
     </div>);
 }
