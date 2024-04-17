@@ -30,6 +30,7 @@ const FACTURAS: NextPage = () => {
 
       send_request("get", "http://34.229.4.148:3000/invoice/get", null, 12345)
       .then(({data})=>{
+        console.log(data);
         setData(data);
       })
     }, [])

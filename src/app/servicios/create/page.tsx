@@ -6,6 +6,8 @@ import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCir
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface services{
     ID: number,
@@ -41,6 +43,18 @@ function UsuariosCreate() {
         // });
 
       }, [])
+
+      const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
     
     function handleChange(e: ChangeEvent<HTMLInputElement> | any){
         const name = e.target.name;
@@ -56,9 +70,15 @@ function UsuariosCreate() {
 
         send_request('post', 'http://34.229.4.148:3000/services/create', formData, 12345)
         .then((response)=>{
+            notify(1);
             console.log(response);
-        });
+        }).
+        catch(err=>{
+            notify(2);
+        })
     }
+
+    
     
     return (
     <div className="min-h-screen">
@@ -95,6 +115,7 @@ function UsuariosCreate() {
             </div>
 
         </form>
+        <ToastContainer/>
     </div>);
 }
 

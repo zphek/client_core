@@ -7,10 +7,7 @@ import { faSearch, faAdd, faTrash, faPencil } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
-<<<<<<< HEAD
-=======
 import { render } from "react-dom";
->>>>>>> eab0f91 (...)
 import { send_request } from "@/helpers/sendreq";
 
 interface Service {
@@ -22,34 +19,25 @@ interface Service {
 }
 
 const SERVICIOS: NextPage = () => {
-<<<<<<< HEAD
     const [data, setData] = useState<Service[]>([]);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
-=======
-    const [data, setData] = useState<Service[]>();
->>>>>>> eab0f91 (...)
+
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
 
-<<<<<<< HEAD
-      send_request('get', 'http://34.229.4.128:3000/services/get', null, 12345)
+      send_request('get', 'http://34.229.4.148:3000/services/get', null, 12345)
       .then(({data})=>{
         setData(data);
+        console.log(data);
       })
       .catch(error=>{
 
       })
-=======
-      send_request("get", "http://34.229.4.148:3000/services/get", null, 12345)
-      .then(({data})=>{
-        setData(data);
-      })
->>>>>>> eab0f91 (...)
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -65,8 +53,6 @@ const SERVICIOS: NextPage = () => {
 
     const renderCell = (key: keyof Service, value: Service[keyof Service]) => {
     };
-
-    
 
     const getEditRoute = (item: Service) => {
       setSelectedUserId(item.ID);
@@ -110,7 +96,7 @@ const SERVICIOS: NextPage = () => {
                 <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
                   <td className="px-6 py-4 whitespace-nowrap">{item.service_name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.services_description}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">RD${item.price}.00</td>
                   <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
                     <FontAwesomeIcon
                       icon={faTrash}
