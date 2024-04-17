@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 import { send_request } from "@/helpers/sendreq";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Client {
   ID: number;
@@ -24,22 +26,39 @@ const CLIENTES: NextPage = () => {
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
+    const notify = (notiType: number) => {
+      if(notiType == 1){
+          return toast.success("The register was successfully deleted!",  {
+              position: "bottom-right"
+          });
+      } else {
+          return toast.error("The register was not deleted.",  {
+              position: "bottom-right"
+          });
+      }
+  }
+
     useEffect(()=>{
       setUrl(window.location.pathname);
 
       send_request('get', 'http://34.229.4.148:3000/clients/get', null, 12345)
       .then(({data})=>{
         setData(data);
-      })
-      .catch(error=>{
+      });
 
-      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
     const handleDelete = (index: number) => {
       setDeletingIndex(index);
+
+      send_request('delete', "http://34.229.4.148:3000/clients/delete/" + index, null, 12345)
+      .then(({data})=>{
+        notify(1)
+      }).catch(err=>{
+        notify(2)
+      })
 
       setTimeout(() => {
         setData((prevItems) => prevItems.filter((_, i) => i !== index));
@@ -51,6 +70,8 @@ const CLIENTES: NextPage = () => {
       setSelectedUserId(item.ID);
       setIsEditModalOpen(true);
     };
+
+    
 
     return (
       <div className="flex flex-col justif-around w-[100%] bg-slate-200/60 max-h-screen">
@@ -112,7 +133,7 @@ const CLIENTES: NextPage = () => {
             </tbody>
           </table>
         </div>
-  
+        <ToastContainer/>
       </div>
     );
 };

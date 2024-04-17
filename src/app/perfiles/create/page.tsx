@@ -6,6 +6,8 @@ import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCir
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface profiles{
     ID: number,
@@ -53,6 +55,19 @@ function UsuariosCreate() {
         role_description: "",
         roles: []
     });
+    const [error, setError] = useState(false);
+
+    const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
 
     const [available, setAvailable] = useState(null);
 
@@ -116,8 +131,11 @@ function UsuariosCreate() {
 
         send_request('post', 'http://34.229.4.148:3000/profiles/create', {...formData, roles: selectedPermisos}, 12345)
         .then((response)=>{
+            notify(1);
             console.log(response);
-        });
+        }).catch(err=>{
+            notify(2);
+        })
     }
     
     return (
@@ -132,7 +150,7 @@ function UsuariosCreate() {
         <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
             <div>
                 <h2 className="text-xl">Nombre del perfil</h2>
-                <input type="text" name="profile_role" id="" className={available == null ? " border-2 border-slate-500 outline-none" : available ? "available" : " border-2 border-red-500 outline-none"} onChange={(e)=>{ searchRole(e); handleChange(e) }} required/>
+                <input type="text" name="profile_role" id="" className={available == null ? " border-2 border-slate-500 outline-none" : available ? "available" : " border-2 border-red-500 outline-none"} onChange={(e)=>{ searchRole(e); handleChange(e) }} />
                 
                 {available == null ? <h3 className="text-slate-500 flex items-center gap-x-2 mt-2">
                 Buscando perfil
@@ -148,7 +166,7 @@ function UsuariosCreate() {
 
             <div>
                 <h2 className="text-xl">Descripción</h2>
-                <input type="text" name="role_description" id="" onChange={(e)=> handleChange(e)} required/>
+                <input type="text" name="role_description" id="" onChange={(e)=> handleChange(e)}/>
             </div>
 
             <div className="flex gap-x-10">
@@ -183,6 +201,7 @@ function UsuariosCreate() {
                     CANCELAR</button>
             </div>
         </form>
+        <ToastContainer/>
     </div>);
 }
 

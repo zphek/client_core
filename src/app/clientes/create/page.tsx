@@ -6,6 +6,8 @@ import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCir
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface clients{
     ID: number,
@@ -31,6 +33,18 @@ function UsuariosCreate() {
 
     const [available, setAvailable] = useState(null);
 
+    const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
+
     useEffect(()=>{
         setUrl('/clientes');
       }, [])
@@ -49,8 +63,12 @@ function UsuariosCreate() {
 
         send_request('post', 'http://34.229.4.148:3000/clients/create', formData, 12345)
         .then((response)=>{
+            notify(1);
             console.log(response);
-        });
+        })
+        .catch(err=>{
+            notify(2);
+        })
     }   
     
     return (
@@ -88,6 +106,7 @@ function UsuariosCreate() {
             </div>
 
         </form>
+        <ToastContainer/>
     </div>);
 }
 

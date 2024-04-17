@@ -10,6 +10,8 @@ import { usePageStore } from "@/store/actualPageStore";
 import { faSearch, faAdd, faTrash, faPencil, faCheckCircle, faX, faL } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { send_request } from "@/helpers/sendreq"; 
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface product{
   ID: number,
@@ -28,6 +30,17 @@ const PRODUCTOS: NextPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const router = useRouter();
 
+    const notify = (notiType: number) => {
+      if(notiType == 1){
+          return toast.success("The register was successfully deleted!",  {
+              position: "bottom-right"
+          });
+      } else {
+          return toast.error("The register was not deleted.",  {
+              position: "bottom-right"
+          });
+      }};
+
     useEffect(()=>{
       setUrl(window.location.pathname);
 
@@ -37,9 +50,20 @@ const PRODUCTOS: NextPage = () => {
       })
     }, [])
 
+    
+
     const handleDelete = async(index: number) => {
       setIsDeleting((prevState) => ({ ...prevState, [index]: true }));
       // Perform delete operation here
+
+      send_request('delete', "http://34.229.4.148:3000/products/delete/"+ index, null, 12345)
+      .then(()=>{
+        notify(1)
+      })
+      .catch(err=>{
+        notify(2)
+      })
+
       setTimeout(() => {
         setIsDeleting((prevState) => ({ ...prevState, [index]: false }));
       }, 500); // Reset the isDeleting state after 500ms (adjust as needed)
