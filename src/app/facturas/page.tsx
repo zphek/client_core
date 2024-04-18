@@ -11,21 +11,26 @@ import { send_request } from "@/helpers/sendreq";
 
 interface Factura {
   ID: number,
-  client: string,
-  date: string,
+  client_id: number,
+  invoice_date: string,
   total_amount: string,
+  payment_method: number,
 }
 
 const FACTURAS: NextPage = () => {
     const [data, setData] = useState<Factura[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
-      setUrl(window.location.pathname);
+      setUrl('/facturas');
 
       send_request("get", "http://34.229.4.148:3000/invoice/get", null, 12345)
       .then(({data})=>{
+        console.log(data);
         setData(data);
       })
     }, [])
@@ -38,20 +43,12 @@ const FACTURAS: NextPage = () => {
       setTimeout(() => {
         setData((prevItems) => prevItems.filter((_, i) => i !== index));
         setDeletingIndex(null);
-      }, 500); // Adjust the delay as needed
+      }, 200);
     };
 
-    const renderCell = (key: keyof Factura, value: Factura[keyof Factura]) => {
-      switch (key) {
-        case 'ID':
-          return (
-            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-              {value}
-            </div>
-          );
-        default:
-          return <>{value}</>;
-      }
+    const getEditRoute = (item: Factura) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
     };
 
     return (
@@ -68,7 +65,6 @@ const FACTURAS: NextPage = () => {
               <FontAwesomeIcon icon={faSearch} size="lg" className="text-gray-500/50"/>
               <input type="text" name="" id="" className="flex-grow bg-transparent outline-none" placeholder="Escribe para filtrar..."/>
             </div>
-  
             <Link href={'/facturas/create'} className="flex items-center justify-center text-white bg-blue-500 px-5 py-2 rounded-lg gap-x-2">
               <FontAwesomeIcon icon={faAdd}/>
               NUEVA FACTURA
@@ -88,17 +84,31 @@ const FACTURAS: NextPage = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item, index) => (
-              <SlideOutRow
-                key={index} 
-                index={index}
-                item={item}
-                onDelete={handleDelete}
-                isDeleting={index === deletingIndex}
-                renderCell={renderCell}
-                getEditRoute={() => `/facturas/edicion`}
-              />
-            ))}
+            {data.length > 0 ? data.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.ID}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.client_id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.invoice_date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">${item.total_amount}.00</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              )) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>

@@ -7,6 +7,8 @@ import { faEye, faEyeSlash, faArrowLeft, faCancel, faChargingStation, faCheck, f
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface users{
     ID: number,
@@ -49,6 +51,17 @@ function UsuariosCreate() {
     const [alert, setAlert] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [available, setAvailable] = useState(null);
+    const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
 
     useEffect(()=>{
         setUrl('/usuarios');
@@ -93,17 +106,15 @@ function UsuariosCreate() {
         send_request("post", "http://34.229.4.148:3000/auth/register", formData, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7IklEIjoyLCJ1c2VybmFtZSI6ImJlcm5hcmRvIiwiZnVsbF9uYW1lIjoiQmVybmFyZG8gQmFleiIsInVzZXJfcGFzc3dvcmQiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOls0OSw1MCw1MSw1Ml19LCJlbWFpbCI6ImJlcm5hcmRvQGdtYWlsLmNvbSIsInBob25lX251bWJlciI6IjgwOTQ5NzE4MDMiLCJwcm9maWxlX3R5cGUiOjEsImNsaWVudF9pZCI6MiwiY3JlYXRlZEF0IjoiMjAyNC0wMy0xNFQwMDowMDowMC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0wMy0xNFQwMDowMDowMC4wMDBaIn0sInByaXZpbGVnZXMiOlsiQUxMIl0sImlhdCI6MTcxMzIyMzk1NCwiZXhwIjoxNzEzMjMxMTU0fQ.swS0xLCfIMP5DaT_C7e8-W0PWDaeac_jjR-bR_6LD_A")
         .then(response=>{
             console.log(response);
-            
-            setAlert(true);
-
-            setTimeout(()=>{
-                setAlert(false);
-            }, 2000)
+            notify(1);
+        })
+        .catch(err=>{
+            notify(2);
         })
     }
 
     function togglePassword(){
-        setShowPassword((prevState) => !prevState);
+        setShowPassword((prevState) => !prevState); 
     }
     
     return (
@@ -179,16 +190,14 @@ function UsuariosCreate() {
             </div>
 
             <div className="w-[30em] flex gap-x-4">
-                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500" type="submit">
                     <FontAwesomeIcon icon={faSave}/>
                     CREAR</button>
                 <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500" type="reset">
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>
-
-            {alert && <SuccessAlert/>}
-
+            <ToastContainer/>
         </form>
     </div>);
 }

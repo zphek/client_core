@@ -8,23 +8,35 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 import { send_request } from "@/helpers/sendreq";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Client {
-  name: string;
-  username: string;
+  ID: number;
+  client_fullname: string;
   email: string;
-  phone: string;
+  phone_number: string;
 }
 
 const CLIENTES: NextPage = () => {
-    const [data, setData] = useState<Client[]>([
-      { name: 'Bernardo Baez 1', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
-      { name: 'Bernardo Baez 2', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
-      { name: 'Bernardo Baez 3', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'},
-      { name: 'Bernardo Baez 4', username: 'bernardob', email: 'bernardo@gmai.com' , phone: '809-555-5555'}
-    ]);
+    const [data, setData] = useState<Client[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
 
     const setUrl = usePageStore((state) => state.changeUrl);
+
+    const notify = (notiType: number) => {
+      if(notiType == 1){
+          return toast.success("The register was successfully deleted!",  {
+              position: "bottom-right"
+          });
+      } else {
+          return toast.error("The register was not deleted.",  {
+              position: "bottom-right"
+          });
+      }
+  }
 
     useEffect(()=>{
       setUrl(window.location.pathname);
@@ -32,10 +44,8 @@ const CLIENTES: NextPage = () => {
       send_request('get', 'http://34.229.4.148:3000/clients/get', null, 12345)
       .then(({data})=>{
         setData(data);
-      })
-      .catch(error=>{
+      });
 
-      })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -43,24 +53,25 @@ const CLIENTES: NextPage = () => {
     const handleDelete = (index: number) => {
       setDeletingIndex(index);
 
+      send_request('delete', "http://34.229.4.148:3000/clients/delete/" + index, null, 12345)
+      .then(({data})=>{
+        notify(1)
+      }).catch(err=>{
+        notify(2)
+      })
+
       setTimeout(() => {
         setData((prevItems) => prevItems.filter((_, i) => i !== index));
         setDeletingIndex(null);
       }, 500); // Adjust the delay as needed
     };
 
-    const renderCell = (key: keyof Client, value: Client[keyof Client]) => {
-      switch (key) {
-        case 'username':
-          return (
-            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-              {value}
-            </div>
-          );
-        default:
-          return <>{value}</>;
-      }
+    const getEditRoute = (item: Client) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
     };
+
+    
 
     return (
       <div className="flex flex-col justif-around w-[100%] bg-slate-200/60 max-h-screen">
@@ -89,28 +100,40 @@ const CLIENTES: NextPage = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombres</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {data.map((item, index) =>(
-                <SlideOutRow
-                key={index}
-                index={index}
-                item={item}
-                onDelete={handleDelete}
-                isDeleting={index === deletingIndex}
-                renderCell={renderCell}
-                getEditRoute={() => `/clientes/edicion`}
-                />
-              ))}
+            {data.length > 0 ? data.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.client_fullname}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.phone_number}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              )) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
-  
+        <ToastContainer/>
       </div>
     );
 };

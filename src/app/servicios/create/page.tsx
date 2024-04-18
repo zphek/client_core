@@ -6,6 +6,8 @@ import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCir
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface services{
     ID: number,
@@ -41,6 +43,18 @@ function UsuariosCreate() {
         // });
 
       }, [])
+
+      const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
     
     function handleChange(e: ChangeEvent<HTMLInputElement> | any){
         const name = e.target.name;
@@ -53,7 +67,18 @@ function UsuariosCreate() {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
+
+        send_request('post', 'http://34.229.4.148:3000/services/create', formData, 12345)
+        .then((response)=>{
+            notify(1);
+            console.log(response);
+        }).
+        catch(err=>{
+            notify(2);
+        })
     }
+
+    
     
     return (
     <div className="min-h-screen">
@@ -81,15 +106,16 @@ function UsuariosCreate() {
             </div>
 
             <div className="w-[30em] flex gap-x-4">
-                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500">
+                <button className="flex-grow bg-blue-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-blue-500 hover:bg-white border-2 border-blue-500" type="submit">
                     <FontAwesomeIcon icon={faSave}/>
                     CREAR</button>
-                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500">
+                <button className="flex-grow bg-red-500 py-2 text-white rounded-lg flex items-center justify-center gap-x-2 hover:text-red-500 hover:bg-white border-2 border-red-500" type="reset">
                     <FontAwesomeIcon icon={faCancel}/>
                     CANCELAR</button>
             </div>
 
         </form>
+        <ToastContainer/>
     </div>);
 }
 

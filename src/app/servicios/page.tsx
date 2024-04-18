@@ -9,31 +9,61 @@ import Link from "next/link";
 import SlideOutRow from "@/components/SlideoutRow/SlideOutRow";
 import { render } from "react-dom";
 import { send_request } from "@/helpers/sendreq";
+import { ToastContainer, toast } from "react-toastify";
 
 interface Service {
-  name: string;
-  decripcion: string;
+  ID: number;
+  service_name: string;
+  services_description: string;
   price: string;
+  isVisible: boolean;
 }
 
 const SERVICIOS: NextPage = () => {
     const [data, setData] = useState<Service[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<{ [index: number]: boolean }>({});
+
 
     const setUrl = usePageStore((state) => state.changeUrl);
 
     useEffect(()=>{
       setUrl(window.location.pathname);
 
-      send_request("get", "http://34.229.4.148:3000/services/get", null, 12345)
+      send_request('get', 'http://34.229.4.148:3000/services/get', null, 12345)
       .then(({data})=>{
         setData(data);
+        console.log(data);
+      })
+      .catch(error=>{
+
       })
     }, [])
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
-    const handleDelete = (index: number) => {
+    const notify = (notiType: number) => {
+      if(notiType == 1){
+          return toast.success("The register was successfully deleted!",  {
+              position: "bottom-right"
+          });
+      } else {
+          return toast.error("The register was not deleted.",  {
+              position: "bottom-right"
+          });
+      }
+    }
+
+    const handleDelete = async(index: number) => {
+      const itemToDelete = data[index];
       setDeletingIndex(index);
+      send_request('delete', "http://34.229.4.148:3000/clients/delete/" + itemToDelete.ID, null, 12345)
+      .then(({data})=>{
+        notify(1)
+      }).catch(err=>{
+        notify(2)
+      })
 
       setTimeout(() => {
         setData((prevItems) => prevItems.filter((_, i) => i !== index));
@@ -42,16 +72,11 @@ const SERVICIOS: NextPage = () => {
     };
 
     const renderCell = (key: keyof Service, value: Service[keyof Service]) => {
-      switch (key) {
-        case 'name':
-          return (
-            <div className="bg-blue-500 text-white p-2 rounded-lg font-bold flex justify-center">
-              {value}
-            </div>
-          );
-        default:
-          return <>{value}</>;
-      }
+    };
+
+    const getEditRoute = (item: Service) => {
+      setSelectedUserId(item.ID);
+      setIsEditModalOpen(true);
     };
 
     return (
@@ -80,25 +105,35 @@ const SERVICIOS: NextPage = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombres</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripcion</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                <th className="px-6 py-5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha creacion</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {data.map((item, index)=>(
-                <SlideOutRow
-                  key={index}
-                  index={index}
-                  item={item}
-                  onDelete={handleDelete}
-                  isDeleting={deletingIndex === index}
-                  renderCell={renderCell}
-                  getEditRoute={() => `/servicios/edicion`}
-                />
-              ))}
+            {data.length > 0 && data.map((item, index) => (
+                <tr key={index} className={`'bg-red-100'} hover:bg-slate-100 transition-[400ms] ${isDeleting[index] ? 'translate-x-full' : ''}`}>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.service_name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.services_description}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">RD${item.price}.00</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-x-3">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size="lg"
+                      className="hover:text-red-500 transition-all cursor-pointer"
+                      onClick={() => handleDelete(index)}
+                    />
+                    <button onClick={() => getEditRoute(item)}>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        size="lg"
+                        className="hover:text-blue-500 transition-all"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              ))  }
             </tbody>
           </table>
         </div>

@@ -1,6 +1,6 @@
 import axios from "axios";
 export async function send_request(method:string = "get", url:string, data:any = null, accessToken:any = null){
-    let settings:any = { 
+    let settings:any = {
         method,
         url,
     };

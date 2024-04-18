@@ -6,6 +6,8 @@ import { faArrowLeft, faCancel, faChargingStation, faCheck, faCheckCircle, faCir
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface clients{
     ID: number,
@@ -31,19 +33,21 @@ function UsuariosCreate() {
 
     const [available, setAvailable] = useState(null);
 
-    /*useEffect(()=>{
-        setUrl('/usuarios');
-        
-        send_request('get', 'http://localhost:3000/products/get', null, 12345)
-        .then(({data})=>{
-            setUsers(data);
-        });
+    const notify = (notiType: number) => {
+        if(notiType == 1){
+            return toast.success("The register was successfully created!",  {
+                position: "bottom-right"
+            });
+        } else {
+            return toast.error("The register was not created.",  {
+                position: "bottom-right"
+            });
+        }
+    }
 
-        send_request('get', 'http://localhost:3000/category/get', null, 12345)
-        .then(({data})=>{
-            setProfile(data);
-        });
-      }, [])*/
+    useEffect(()=>{
+        setUrl('/clientes');
+      }, [])
     
     function handleChange(e: ChangeEvent<HTMLInputElement> | any){
         const name = e.target.name;
@@ -56,7 +60,16 @@ function UsuariosCreate() {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-    }
+
+        send_request('post', 'http://34.229.4.148:3000/clients/create', formData, 12345)
+        .then((response)=>{
+            notify(1);
+            console.log(response);
+        })
+        .catch(err=>{
+            notify(2);
+        })
+    }   
     
     return (
     <div className="min-h-screen">
@@ -70,7 +83,7 @@ function UsuariosCreate() {
         <form onSubmit={handleSubmit} className="p-5 register-smth min-h-[100%]">
             <div>
                 <h2 className="text-xl">Nombre del cliente</h2>
-                <input type="text" name="client_fullname" id="" onChange={(e)=>{ handleChange(e) }} required/>
+                <input type="text" name="client_fullname" id="" onChange={(e)=>{ handleChange(e)}} required/>
             </div>
 
             <div>
@@ -93,6 +106,7 @@ function UsuariosCreate() {
             </div>
 
         </form>
+        <ToastContainer/>
     </div>);
 }
 
